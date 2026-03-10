@@ -23,7 +23,7 @@ public class FileUtil {
 
     public static List<String> readMembers(){
 
-        List<String> members=new ArrayList< >();
+        List<String> members=new ArrayList<>();
 
         try{
             BufferedReader reader=new BufferedReader(new FileReader(FILE_NAME));
