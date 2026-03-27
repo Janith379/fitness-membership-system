@@ -1,6 +1,6 @@
 package com.example.fitnesscentersystest1.controller;
 
-import com.fitness.service.MemberService;
+import com.example.fitnesscentersystest1.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
