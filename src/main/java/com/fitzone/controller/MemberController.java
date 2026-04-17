@@ -14,10 +14,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 import java.util.Optional;
 
-
- //Controller handling member CRUD operations:
-  //registration, listing, viewing, updating, deleting, and searching.
-
+/**
+ * Controller handling member CRUD operations:
+ * registration, listing, viewing, updating, deleting, and searching.
+ */
 @Controller
 @RequestMapping("/members")
 public class MemberController {
@@ -30,19 +30,19 @@ public class MemberController {
         this.paymentService = paymentService;
     }
 
-
-     // Displays the registration form.
-
+    /**
+     * Displays the registration form.
+     */
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("registrationForm", new RegistrationForm());
         return "register";
     }
 
-
-      // Processes the registration form.
-      //On success, stores form data in session and redirects to payment page.
-
+    /**
+     * Processes the registration form.
+     * On success, stores form data in session and redirects to payment page.
+     */
     @PostMapping("/register")
     public String processRegistration(@Valid @ModelAttribute("registrationForm") RegistrationForm form,
                                       BindingResult result,
@@ -72,9 +72,9 @@ public class MemberController {
         return "redirect:/payment";
     }
 
-
-     // Lists all members with optional search.
-
+    /**
+     * Lists all members with optional search.
+     */
     @GetMapping("/list")
     public String listMembers(@RequestParam(value = "query", required = false) String query,
                               Model model) {
@@ -89,9 +89,9 @@ public class MemberController {
         return "members-list";
     }
 
-
-     // Shows full details of a specific member, including their payments.
-
+    /**
+     * Shows full details of a specific member, including their payments.
+     */
     @GetMapping("/view/{id}")
     public String viewMember(@PathVariable("id") String id, Model model,
                              RedirectAttributes redirectAttributes) {
@@ -107,9 +107,9 @@ public class MemberController {
         return "member-detail";
     }
 
-
-     // Shows the edit form pre-filled with existing member data.
-
+    /**
+     * Shows the edit form pre-filled with existing member data.
+     */
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") String id, Model model,
                                RedirectAttributes redirectAttributes) {
@@ -136,9 +136,9 @@ public class MemberController {
         return "member-update";
     }
 
-
-     // Processes the member update form.
-
+    /**
+     * Processes the member update form.
+     */
     @PostMapping("/edit/{id}")
     public String processUpdate(@PathVariable("id") String id,
                                 @Valid @ModelAttribute("registrationForm") RegistrationForm form,
@@ -155,9 +155,9 @@ public class MemberController {
         return "redirect:/members/list";
     }
 
-
-      //Deletes a member and their associated payments.
-
+    /**
+     * Deletes a member and their associated payments.
+     */
     @GetMapping("/delete/{id}")
     public String deleteMember(@PathVariable("id") String id,
                                RedirectAttributes redirectAttributes) {
