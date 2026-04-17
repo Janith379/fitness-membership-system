@@ -25,7 +25,7 @@ public class PremiumMember extends Member {
 
 
      //POLYMORPHISM — Returns the monthly fee for Premium members.
-     //oop
+     //kjnj
     @Override
     public double calculateMonthlyFee() {
         return PREMIUM_MONTHLY_FEE;
