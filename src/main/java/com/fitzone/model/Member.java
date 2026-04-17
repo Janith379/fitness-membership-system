@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 /**
  * Abstract base class for all gym members.
- *
  * OOP CONCEPT — ENCAPSULATION: All fields are private with public getters/setters.
  * OOP CONCEPT — ABSTRACTION: This class is abstract; it cannot be instantiated directly.
  * OOP CONCEPT — POLYMORPHISM: The abstract method calculateMonthlyFee() is overridden
