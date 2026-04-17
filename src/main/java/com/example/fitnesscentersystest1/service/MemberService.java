@@ -1,6 +1,7 @@
 package com.example.fitnesscentersystest1.service;
 
-import com.fitness.util.FileUtil;
+
+import com.example.fitnesscentersystest1.util.FileUtil;
 import java.util.List;
 
 public class MemberService {
