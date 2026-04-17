@@ -1,4 +1,4 @@
-package com.example.fitnesscentersystest1;
+package com.example.fitzone;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
