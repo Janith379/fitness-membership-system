@@ -1,6 +1,6 @@
-package com.example.fitzone.controller;
+package com.fitzone.controller;
 
-import com.example.fitzone.service.MemberService;
+import com.fitzone.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

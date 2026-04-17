@@ -1,4 +1,4 @@
-package com.example.fitzone.model;
+package com.fitzone.model;
 
 import java.time.LocalDate;
 

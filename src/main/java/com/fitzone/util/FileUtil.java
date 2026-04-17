@@ -1,4 +1,4 @@
-package com.example.fitzone.util;
+package com.fitzone.util;
 
 import java.io.*;
 import java.util.ArrayList;

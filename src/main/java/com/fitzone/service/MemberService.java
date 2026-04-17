@@ -1,7 +1,7 @@
-package com.example.fitzone.service;
+package com.fitzone.service;
 
 
-import com.example.fitzone.util.FileUtil;
+import com.fitzone.util.FileUtil;
 import java.util.List;
 
 public class MemberService {
