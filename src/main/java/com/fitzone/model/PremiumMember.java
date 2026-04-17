@@ -23,9 +23,9 @@ public class PremiumMember extends Member {
                 durationMonths, joinDate, expiryDate, PREMIUM_MONTHLY_FEE, notes);
     }
 
-    /**
-     * POLYMORPHISM — Returns the monthly fee for Premium members.
-     */
+
+     //POLYMORPHISM — Returns the monthly fee for Premium members.
+     //
     @Override
     public double calculateMonthlyFee() {
         return PREMIUM_MONTHLY_FEE;
