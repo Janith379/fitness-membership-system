@@ -1,7 +1,7 @@
-package com.example.fitnesscentersystest1.service;
+package com.example.fitzone.service;
 
 
-import com.example.fitnesscentersystest1.util.FileUtil;
+import com.example.fitzone.util.FileUtil;
 import java.util.List;
 
 public class MemberService {

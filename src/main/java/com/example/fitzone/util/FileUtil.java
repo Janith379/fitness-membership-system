@@ -1,4 +1,4 @@
-package com.example.fitnesscentersystest1.util;
+package com.example.fitzone.util;
 
 import java.io.*;
 import java.util.ArrayList;
