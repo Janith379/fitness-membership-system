@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 /**
-  Service layer for Member business logic.
-  Handles member creation (with polymorphic fee calculation),
-  updates, deletion, search, and retrieval.
- **/
-
+ * Service layer for Member business logic.
+ * Handles member creation (with polymorphic fee calculation),
+ * updates, deletion, search, and retrieval.
+ */
 @Service
 public class MemberService {
 
@@ -34,8 +33,7 @@ public class MemberService {
      * @param form the registration form data
      * @param paymentDate the date payment was made
      * @return the created Member object with generated ID and computed dates
-     **/
-
+     */
     public Member createMember(RegistrationForm form, LocalDate paymentDate) {
         String memberId = idGenerator.generateMemberId();
         LocalDate expiryDate = paymentDate.plusMonths(form.getDurationMonths());
@@ -63,23 +61,23 @@ public class MemberService {
         return member;
     }
 
-
-     //Returns all members.
-
+    /**
+     * Returns all members.
+     */
     public List<Member> getAllMembers() {
         return memberRepository.getAllMembers();
     }
 
-
-     // Finds a member by ID.
-
+    /**
+     * Finds a member by ID.
+     */
     public Optional<Member> findById(String memberId) {
         return memberRepository.findById(memberId);
     }
 
-
-     // Searches members by query (partial, case-insensitive on name, email, ID).
-
+    /**
+     * Searches members by query (partial, case-insensitive on name, email, ID).
+     */
     public List<Member> searchMembers(String query) {
         return memberRepository.searchMembers(query);
     }
@@ -87,7 +85,7 @@ public class MemberService {
     /**
      * Updates an existing member.
      * If membership type or duration changes, recalculates fee and expiry date.
-     **/
+     */
     public void updateMember(String memberId, RegistrationForm form) {
         Optional<Member> existing = memberRepository.findById(memberId);
         if (existing.isPresent()) {
@@ -136,9 +134,9 @@ public class MemberService {
         }
     }
 
-
-      //Deletes a member by their ID.
-
+    /**
+     * Deletes a member by their ID.
+     */
     public void deleteMember(String memberId) {
         memberRepository.deleteMember(memberId);
     }
