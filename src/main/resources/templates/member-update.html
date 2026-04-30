@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Update member details - FitZone Gym">
+    <title>Update Member - FitZone Gym</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <span class="brand-fit">Fit</span><span class="brand-zone">Zone</span>
+            <small class="text-muted ms-2" style="font-size: 0.7rem; font-weight: 400;">GYM</small>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}"><i class="bi bi-house-door me-1"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/members/register}"><i class="bi bi-person-plus me-1"></i>Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/members/list}"><i class="bi bi-grid-3x3-gap me-1"></i>Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<div class="page-header" style="padding-top: 100px;">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/members/list}">Dashboard</a></li>
+                <li class="breadcrumb-item active">Edit Member</li>
+            </ol>
+        </nav>
+        <h1>
+            <i class="bi bi-pencil-square text-gradient me-2"></i>Edit Member
+            <span class="ms-2" style="color: var(--primary); font-size: 1.2rem;" th:text="${memberId}">M001</span>
+        </h1>
+        <p class="text-muted mt-2 mb-0">Update member information. Member ID cannot be changed.</p>
+    </div>
+</div>
+
+<!-- Update Form -->
+<div class="container mb-5">
+    <div class="form-section fade-in-up">
+
+        <!-- Info Notice -->
+        <div class="alert-custom alert-warning-custom mb-4" style="font-size: 0.85rem;">
+            <i class="bi bi-info-circle-fill"></i>
+            <div>
+                <strong>Note:</strong> Changing the membership type or duration will recalculate the expiry date
+                based on the original join date. No additional payment is required for this update.
+            </div>
+        </div>
+
+        <div class="card-custom">
+            <div class="card-body p-4">
+                <form id="registrationForm" th:action="@{/members/edit/{id}(id=${memberId})}"
+                      th:object="${registrationForm}" method="post" novalidate>
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" th:field="*{fullName}"
+                               th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''"
+                               placeholder="Enter full name">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" th:field="*{email}"
+                               th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                               placeholder="your.email@example.com">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+
+                    <!-- Phone & Age Row -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" th:field="*{phone}"
+                                   th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''"
+                                   placeholder="0771234567">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="age" class="form-label">Age</label>
+                            <input type="number" class="form-control" id="age" th:field="*{age}"
+                                   th:classappend="${#fields.hasErrors('age')} ? 'is-invalid' : ''"
+                                   min="16" max="100" placeholder="25">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <div class="d-flex gap-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:field="*{gender}" value="Male" id="genderMale">
+                                <label class="form-check-label" for="genderMale" style="color: var(--text-secondary);">Male</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:field="*{gender}" value="Female" id="genderFemale">
+                                <label class="form-check-label" for="genderFemale" style="color: var(--text-secondary);">Female</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" th:field="*{gender}" value="Other" id="genderOther">
+                                <label class="form-check-label" for="genderOther" style="color: var(--text-secondary);">Other</label>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></div>
+                    </div>
+
+                    <!-- Membership Type & Duration Row -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="membershipType" class="form-label">Membership Type</label>
+                            <select class="form-select" id="membershipType" th:field="*{membershipType}"
+                                    th:classappend="${#fields.hasErrors('membershipType')} ? 'is-invalid' : ''">
+                                <option value="">Select type...</option>
+                                <option value="Regular">Regular — LKR 5,000/month</option>
+                                <option value="Premium">Premium — LKR 7,500/month</option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('membershipType')}" th:errors="*{membershipType}"></div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="durationMonths" class="form-label">Duration</label>
+                            <select class="form-select" id="durationMonths" th:field="*{durationMonths}"
+                                    th:classappend="${#fields.hasErrors('durationMonths')} ? 'is-invalid' : ''">
+                                <option value="">Select duration...</option>
+                                <option value="1">1 Month</option>
+                                <option value="3">3 Months</option>
+                                <option value="6">6 Months</option>
+                                <option value="12">12 Months</option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('durationMonths')}" th:errors="*{durationMonths}"></div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-4">
+                        <label for="notes" class="form-label">Notes <span class="text-muted">(optional)</span></label>
+                        <textarea class="form-control" id="notes" th:field="*{notes}" rows="3"
+                                  placeholder="Any special requests or notes..."></textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn-primary-custom flex-grow-1">
+                            <i class="bi bi-check-circle me-2"></i>Save Changes
+                        </button>
+                        <a th:href="@{/members/list}" class="btn-outline-custom">Cancel</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p class="mb-0">
+            <span class="brand-fit" style="font-family: 'Outfit', sans-serif; font-weight: 700;">Fit</span><span style="font-family: 'Outfit', sans-serif; font-weight: 700;">Zone</span>
+            Gym &copy; 2026 — Membership Management System
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>
