@@ -2,6 +2,7 @@ package com.fitzone.controller;
 
 import com.fitzone.model.*;
 import com.fitzone.service.MemberService;
+import com.fitzone.service.MembershipPlanService;
 import com.fitzone.service.PaymentService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -24,10 +25,12 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PaymentService paymentService;
+    private final MembershipPlanService planService;
 
-    public MemberController(MemberService memberService, PaymentService paymentService) {
+    public MemberController(MemberService memberService, PaymentService paymentService, MembershipPlanService planService) {
         this.memberService = memberService;
         this.paymentService = paymentService;
+        this.planService = planService;
     }
 
     /**
@@ -36,6 +39,7 @@ public class MemberController {
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("registrationForm", new RegistrationForm());
+        model.addAttribute("plans", planService.getAllPlans());
         return "register";
     }
 
@@ -55,14 +59,13 @@ public class MemberController {
         // Store registration data in session for the payment step
         session.setAttribute("registrationForm", form);
 
-        // Calculate preview amounts using polymorphism
-        double monthlyFee;
-        if ("Premium".equalsIgnoreCase(form.getMembershipType())) {
-            PremiumMember temp = new PremiumMember();
-            monthlyFee = temp.calculateMonthlyFee();
-        } else {
-            RegularMember temp = new RegularMember();
-            monthlyFee = temp.calculateMonthlyFee();
+        // Calculate preview amounts using selected plan
+        double monthlyFee = 0.0;
+        Optional<MembershipPlan> selectedPlan = planService.getAllPlans().stream()
+                .filter(p -> p.getPlanName().equalsIgnoreCase(form.getMembershipType()))
+                .findFirst();
+        if (selectedPlan.isPresent()) {
+            monthlyFee = selectedPlan.get().getMonthlyFee();
         }
         double totalAmount = monthlyFee * form.getDurationMonths();
 
@@ -133,6 +136,7 @@ public class MemberController {
 
         model.addAttribute("registrationForm", form);
         model.addAttribute("memberId", id);
+        model.addAttribute("plans", planService.getAllPlans());
         return "member-update";
     }
 

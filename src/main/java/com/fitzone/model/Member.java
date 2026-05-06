@@ -10,7 +10,7 @@ import java.time.LocalDate;
  *   by RegularMember and PremiumMember to return different fee amounts.
  * OOP CONCEPT — INHERITANCE: RegularMember and PremiumMember extend this class.
  */
-public abstract class Member {
+public class Member {
 
     // --- Private fields (ENCAPSULATION) ---
     private String memberId;
@@ -27,10 +27,10 @@ public abstract class Member {
     private String notes;
 
     // --- Constructors ---
-    protected Member() {
+    public Member() {
     }
 
-    protected Member(String memberId, String fullName, String email, String phone,
+    public Member(String memberId, String fullName, String email, String phone,
                      int age, String gender, String membershipType, int durationMonths,
                      LocalDate joinDate, LocalDate expiryDate, double monthlyFee, String notes) {
         this.memberId = memberId;
@@ -51,7 +51,9 @@ public abstract class Member {
      * POLYMORPHISM — Abstract method overridden by subclasses to compute
      * the monthly membership fee based on membership type.
      */
-    public abstract double calculateMonthlyFee();
+    public double calculateMonthlyFee() {
+        return this.monthlyFee;
+    }
 
     /**
      * Calculates the total payment amount = monthlyFee * durationMonths.

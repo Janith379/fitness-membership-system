@@ -1,20 +1,594 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FitZone Gym - Build your strength, build your life. Join FitZone Gym and start your journey to a healthier, stronger you.">
+    <title>FitZone Gym | Build Your Strength</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+    <style>
+        /* ============================================================
+           HOME PAGE - FULL SCREEN HERO (matches reference image)
+           ============================================================ */
 
-    <title>Fitness Center</title>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050505;
+            color: #fff;
+        }
+
+        /* ---- NAVBAR ---- */
+        .fz-navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 4rem;
+            height: 70px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            animation: slideDown 0.6s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to   { transform: translateY(0);     opacity: 1; }
+        }
+
+        .fz-brand {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            color: #fff;
+        }
+        .fz-brand .brand-fit  { color: #fff; }
+        .fz-brand .brand-zone { color: #e8192c; }
+        .fz-brand .brand-gym  {
+            font-size: 0.65rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.55);
+            margin-left: 6px;
+            letter-spacing: 2px;
+            vertical-align: middle;
+        }
+
+        .fz-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            list-style: none;
+        }
+
+        .fz-nav-links a {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.45rem 1rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .fz-nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 50%; right: 50%;
+            height: 2px;
+            background: #e8192c;
+            transition: left 0.25s ease, right 0.25s ease;
+        }
+
+        .fz-nav-links a:hover,
+        .fz-nav-links a.active {
+            color: #e8192c;
+        }
+        .fz-nav-links a:hover::after,
+        .fz-nav-links a.active::after {
+            left: 1rem; right: 1rem;
+        }
+
+        .fz-nav-links .nav-btn {
+            background: #e8192c;
+            color: #fff !important;
+            padding: 0.45rem 1.2rem;
+            border-radius: 2px;
+            margin-left: 0.75rem;
+            transition: background 0.25s ease, transform 0.2s ease !important;
+        }
+        .fz-nav-links .nav-btn::after { display: none; }
+        .fz-nav-links .nav-btn:hover {
+            background: #c5101f !important;
+            color: #fff !important;
+            transform: translateY(-1px);
+        }
+
+        /* Hamburger */
+        .fz-hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .fz-hamburger span {
+            display: block; width: 24px; height: 2px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        /* ---- HERO ---- */
+        .fz-hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* Background image via Unsplash – high quality dark gym interior */
+        .fz-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1920&q=85&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: scale(1.05);
+            animation: heroBgLoad 1.2s ease forwards;
+        }
+
+        @keyframes heroBgLoad {
+            from { transform: scale(1.12); opacity: 0.6; }
+            to   { transform: scale(1);    opacity: 1;   }
+        }
+
+        /* Dark overlay – heavier on left (text side) */
+        .fz-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to right,
+                rgba(0,0,0,0.82) 0%,
+                rgba(0,0,0,0.55) 45%,
+                rgba(0,0,0,0.18) 100%
+            );
+        }
+
+        /* Bottom fade */
+        .fz-hero-bottom-fade {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 180px;
+            background: linear-gradient(to top, #050505, transparent);
+        }
+
+        /* Red vertical accent bar */
+        .fz-hero-accent-bar {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 5px;
+            background: #e8192c;
+            animation: barSlide 0.8s 0.4s ease both;
+        }
+        @keyframes barSlide {
+            from { transform: scaleY(0); transform-origin: top; }
+            to   { transform: scaleY(1); transform-origin: top; }
+        }
+
+        /* Hero content */
+        .fz-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 680px;
+            padding: 0 4rem;
+            margin-top: 70px; /* navbar height */
+            margin-bottom: 120px; /* space for feature strip */
+        }
+
+        .fz-hero-eyebrow {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #e8192c;
+            margin-bottom: 1.2rem;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.5s ease forwards;
+        }
+
+        .fz-hero-title {
+            font-family: 'Bebas Neue', 'Outfit', sans-serif;
+            font-size: clamp(3.8rem, 8vw, 7rem);
+            font-weight: 400; /* Bebas Neue is already bold */
+            line-height: 0.93;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+            margin-bottom: 1.4rem;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.65s ease forwards;
+        }
+
+        .fz-hero-title .red { color: #e8192c; }
+
+        .fz-hero-subtitle {
+            font-size: 1rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.7;
+            max-width: 420px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.8s ease forwards;
+        }
+
+        .fz-hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.95s ease forwards;
+        }
+
+        /* Primary CTA – solid red */
+        .fz-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #e8192c;
+            color: #fff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 0.9rem 2rem;
+            border: 2px solid #e8192c;
+            border-radius: 2px;
+            transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .fz-btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.1);
+            transform: translateX(-110%) skewX(-15deg);
+            transition: transform 0.4s ease;
+        }
+        .fz-btn-primary:hover {
+            background: #c5101f;
+            border-color: #c5101f;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(232,25,44,0.45);
+        }
+        .fz-btn-primary:hover::before {
+            transform: translateX(110%) skewX(-15deg);
+        }
+        .fz-btn-primary .arrow-icon {
+            transition: transform 0.25s ease;
+        }
+        .fz-btn-primary:hover .arrow-icon {
+            transform: translateX(4px);
+        }
+
+        /* Secondary CTA – outline white */
+        .fz-btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: transparent;
+            color: #fff;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 0.9rem 2rem;
+            border: 2px solid rgba(255,255,255,0.55);
+            border-radius: 2px;
+            transition: all 0.25s ease;
+        }
+        .fz-btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: #fff;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0);    }
+        }
+
+        /* ---- FEATURE STRIP (bottom of hero) ---- */
+        .fz-feature-strip {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            z-index: 3;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: stretch;
+        }
+
+        .fz-feature-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.4rem 2rem;
+            border-right: 1px solid rgba(255,255,255,0.07);
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards;
+            transition: background 0.25s ease;
+            cursor: default;
+        }
+        .fz-feature-item:last-child { border-right: none; }
+        .fz-feature-item:hover { background: rgba(232,25,44,0.08); }
+
+        .fz-feature-item:nth-child(1) { animation-delay: 1.1s; }
+        .fz-feature-item:nth-child(2) { animation-delay: 1.25s; }
+        .fz-feature-item:nth-child(3) { animation-delay: 1.4s; }
+        .fz-feature-item:nth-child(4) { animation-delay: 1.55s; }
+
+        .fz-feature-icon {
+            font-size: 1.6rem;
+            color: #e8192c;
+            flex-shrink: 0;
+        }
+        .fz-feature-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.45);
+            font-weight: 600;
+            margin-bottom: 0.15rem;
+        }
+        .fz-feature-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* ---- FOOTER ---- */
+        .fz-footer {
+            background: #050505;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding: 1.5rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.5px;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 991px) {
+            .fz-navbar { padding: 0 1.5rem; }
+
+            .fz-nav-links {
+                display: none;
+                position: fixed;
+                top: 70px; left: 0; right: 0;
+                background: rgba(5,5,5,0.97);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem 1.5rem;
+                gap: 0.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+            }
+            .fz-nav-links.open { display: flex; }
+            .fz-nav-links a { font-size: 0.9rem; padding: 0.75rem 0; width: 100%; }
+            .fz-nav-links .nav-btn { margin-left: 0; margin-top: 0.5rem; text-align: center; }
+            .fz-hamburger { display: flex; }
+
+            .fz-hero-content { padding: 0 1.5rem; max-width: 100%; }
+            .fz-feature-strip { display: none; }
+        }
+
+        @media (max-width: 576px) {
+            .fz-hero-title { font-size: clamp(3rem, 14vw, 4.5rem); }
+            .fz-footer { padding: 1.5rem; }
+        }
+    </style>
 </head>
+<body>
 
-<body class="container">
+<!-- ======== NAVBAR ======== -->
+<nav class="fz-navbar" id="fzNavbar">
+    <a class="fz-brand" th:href="@{/}">
+        <span class="brand-fit">FITZONE</span><span class="brand-zone"> GYM</span>
+    </a>
 
-<h1 class="mt-4">Fitness Center Membership System</h1>
+    <!-- Mobile hamburger -->
+    <div class="fz-hamburger" id="fzHamburger" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+    </div>
 
-<a href="/register" class="btn btn-primary">Register Member</a>
+    <ul class="fz-nav-links" id="fzNavLinks">
+        <li><a href="#" class="active">HOME</a></li>
+        <li><a href="#about">ABOUT US</a></li>
+        <li><a href="#membership">MEMBERSHIP</a></li>
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/members/list}">TRAINERS</a>
+        </li>
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/payment}">PAYMENT</a>
+        </li>
+        <li><a href="#contact">CONTACT</a></li>
+        <li sec:authorize="isAnonymous()">
+            <a th:href="@{/login}" class="nav-btn">LOGIN</a>
+        </li>
+        <li sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;">
+                    <a class="nav-btn" style="display:inline-block;">LOGOUT</a>
+                </button>
+            </form>
+        </li>
+    </ul>
+</nav>
 
-<a href="/members" class="btn btn-success">View Members</a>
+<!-- ======== HERO SECTION ======== -->
+<section class="fz-hero" id="home">
 
+    <!-- Background image -->
+    <div class="fz-hero-bg"></div>
+
+    <!-- Overlays -->
+    <div class="fz-hero-overlay"></div>
+    <div class="fz-hero-bottom-fade"></div>
+    <div class="fz-hero-accent-bar"></div>
+
+    <!-- Content -->
+    <div class="fz-hero-content">
+        <span class="fz-hero-eyebrow">&#9670; Since 2010 — Premium Fitness</span>
+
+        <h1 class="fz-hero-title">
+            Build Your<br>
+            <span class="red">Strength</span><br>
+            Build Your Life
+        </h1>
+
+        <p class="fz-hero-subtitle">
+            Join FitZone Gym and start your journey to a healthier, stronger you.
+        </p>
+
+        <div class="fz-hero-actions">
+            <!-- Anonymous users -->
+            <a th:href="@{/members/register}" class="fz-btn-primary" sec:authorize="isAnonymous()">
+                JOIN NOW <i class="bi bi-arrow-right arrow-icon"></i>
+            </a>
+            <a th:href="@{/login}" class="fz-btn-outline" sec:authorize="isAnonymous()">
+                <i class="bi bi-box-arrow-in-right"></i> LOGIN
+            </a>
+
+            <!-- Authenticated - admin -->
+            <a th:href="@{/members/list}" class="fz-btn-primary" sec:authorize="hasRole('ADMIN')">
+                ADMIN DASHBOARD <i class="bi bi-arrow-right arrow-icon"></i>
+            </a>
+
+            <!-- Authenticated - member -->
+            <a th:href="@{/dashboard}" class="fz-btn-primary" sec:authorize="hasRole('MEMBER')">
+                MY DASHBOARD <i class="bi bi-arrow-right arrow-icon"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Feature strip at bottom -->
+    <div class="fz-feature-strip">
+        <div class="fz-feature-item">
+            <div class="fz-feature-icon"><i class="bi bi-people-fill"></i></div>
+            <div>
+                <div class="fz-feature-label">Members</div>
+                <div class="fz-feature-value">500+ Active</div>
+            </div>
+        </div>
+        <div class="fz-feature-item">
+            <div class="fz-feature-icon"><i class="bi bi-trophy-fill"></i></div>
+            <div>
+                <div class="fz-feature-label">Expert</div>
+                <div class="fz-feature-value">Certified Trainers</div>
+            </div>
+        </div>
+        <div class="fz-feature-item">
+            <div class="fz-feature-icon"><i class="bi bi-clock-fill"></i></div>
+            <div>
+                <div class="fz-feature-label">Open</div>
+                <div class="fz-feature-value">24 / 7 Access</div>
+            </div>
+        </div>
+        <div class="fz-feature-item">
+            <div class="fz-feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+            <div>
+                <div class="fz-feature-label">Equipment</div>
+                <div class="fz-feature-value">100+ Machines</div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!-- ======== FOOTER ======== -->
+<footer class="fz-footer">
+    <span>
+        <strong style="color:rgba(255,255,255,0.6);">FitZone Gym</strong>
+        &nbsp;&copy; 2026 &mdash; Membership Management System
+    </span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+<script>
+    // ---- Navbar scroll effect ----
+    const navbar = document.getElementById('fzNavbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 40) {
+            navbar.style.background = 'rgba(0,0,0,0.92)';
+            navbar.style.borderBottomColor = 'rgba(255,255,255,0.1)';
+        } else {
+            navbar.style.background = 'rgba(0,0,0,0.35)';
+            navbar.style.borderBottomColor = 'rgba(255,255,255,0.06)';
+        }
+    });
+
+    // ---- Mobile menu toggle ----
+    function toggleMobileMenu() {
+        const nav = document.getElementById('fzNavLinks');
+        const ham = document.getElementById('fzHamburger');
+        nav.classList.toggle('open');
+        ham.classList.toggle('open');
+    }
+
+    // ---- Parallax subtle effect on bg ----
+    const heroBg = document.querySelector('.fz-hero-bg');
+    if (heroBg) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            heroBg.style.transform = `translateY(${scrolled * 0.35}px)`;
+        }, { passive: true });
+    }
+
+    // ---- Cursor glow effect on hero ----
+    const hero = document.querySelector('.fz-hero');
+    if (hero) {
+        hero.addEventListener('mousemove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            hero.style.setProperty('--mx', x + 'px');
+            hero.style.setProperty('--my', y + 'px');
+        });
+    }
+</script>
 </body>
 </html>
