@@ -1,0 +1,107 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║          FITZONE GYM MANAGEMENT SYSTEM                         ║
+║                    START HERE                                  ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+
+🎯 QUICKEST WAY TO START
+═══════════════════════════════════════════════════════════════
+
+   Double-click:  LAUNCHER.bat
+
+   This opens an interactive menu with all options!
+
+
+🚀 ALTERNATIVE: DIRECT START
+═══════════════════════════════════════════════════════════════
+
+   For First Time:     first-time-setup.bat
+   For Regular Use:    start.bat
+
+
+📜 ALL AVAILABLE SCRIPTS
+═══════════════════════════════════════════════════════════════
+
+   LAUNCHER.bat           → Interactive menu (EASIEST!)
+   start.bat              → Smart launcher (RECOMMENDED)
+   first-time-setup.bat   → Setup wizard for beginners
+   run-continuous.bat     → Auto-restart on crash
+   start-app.bat          → Run in background
+   stop-app.bat           → Stop application
+   restart-app.bat        → Restart application
+   setup-java.bat         → Configure Java
+   check-system.bat       → System diagnostics
+
+
+📚 DOCUMENTATION
+═══════════════════════════════════════════════════════════════
+
+   README.md              → Complete guide
+   STARTUP-GUIDE.md       → Startup instructions
+   QUICK-REFERENCE.txt    → Quick reference card
+   FIXES-APPLIED.md       → What was fixed
+
+
+🌐 ACCESS THE APPLICATION
+═══════════════════════════════════════════════════════════════
+
+   Once started, open your browser:
+
+   http://localhost:8080
+
+
+❓ HAVING PROBLEMS?
+═══════════════════════════════════════════════════════════════
+
+   1. Run: check-system.bat
+   2. Run: setup-java.bat (if Java issues)
+   3. Read: README.md (troubleshooting section)
+
+
+💡 TIPS
+═══════════════════════════════════════════════════════════════
+
+   ✓ Use LAUNCHER.bat for easiest access
+   ✓ Keep console window open while app runs
+   ✓ Check console for error messages
+   ✓ Port 8080 must be available
+
+
+📋 REQUIREMENTS
+═══════════════════════════════════════════════════════════════
+
+   ✓ Java JDK 17 or later
+   ✓ Windows OS
+   ✓ Port 8080 available
+
+   Don't have Java? Download from: https://adoptium.net/
+
+
+🎓 WHAT'S INCLUDED
+═══════════════════════════════════════════════════════════════
+
+   ✓ Member Registration
+   ✓ Payment Processing
+   ✓ Member Management (CRUD)
+   ✓ Search Functionality
+   ✓ Payment History
+   ✓ CSV-based Data Storage
+
+
+🔧 TECHNICAL DETAILS
+═══════════════════════════════════════════════════════════════
+
+   Framework:    Spring Boot 3.2.3
+   Template:     Thymeleaf
+   Language:     Java 17
+   Database:     CSV Files
+   Port:         8080
+
+
+═══════════════════════════════════════════════════════════════
+
+         Ready to start? Double-click LAUNCHER.bat!
+
+═══════════════════════════════════════════════════════════════

@@ -1,0 +1,78 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║          FITZONE GYM - QUICK REFERENCE CARD                    ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+┌────────────────────────────────────────────────────────────────┐
+│  🚀 QUICK START                                                │
+└────────────────────────────────────────────────────────────────┘
+
+  1. Double-click:  start.bat
+  2. Open browser:  http://localhost:8080
+  3. Done! ✓
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  📜 AVAILABLE SCRIPTS                                          │
+└────────────────────────────────────────────────────────────────┘
+
+  start.bat              → Smart launcher (RECOMMENDED)
+  run-continuous.bat     → Auto-restart on crash
+  start-app.bat          → Run in background
+  stop-app.bat           → Stop application
+  restart-app.bat        → Restart application
+  setup-java.bat         → Configure Java
+  check-system.bat       → System diagnostics
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  ❌ COMMON PROBLEMS & SOLUTIONS                                │
+└────────────────────────────────────────────────────────────────┘
+
+  Problem: Java not found
+  Solution: Run setup-java.bat
+           Install from https://adoptium.net/
+
+  Problem: Port 8080 in use
+  Solution: Run stop-app.bat
+
+  Problem: JAVA_HOME error
+  Solution: Run setup-java.bat
+           Follow instructions to set permanently
+
+  Problem: App won't start
+  Solution: Run check-system.bat
+           Check Java version (need 17+)
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  🛑 STOPPING THE APPLICATION                                   │
+└────────────────────────────────────────────────────────────────┘
+
+  In console:     Press Ctrl+C
+  In background:  Run stop-app.bat
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  📋 REQUIREMENTS                                               │
+└────────────────────────────────────────────────────────────────┘
+
+  ✓ Java JDK 17 or later
+  ✓ Windows OS
+  ✓ Port 8080 available
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  💡 TIPS                                                       │
+└────────────────────────────────────────────────────────────────┘
+
+  • Keep console window open while app runs
+  • Check console for error messages
+  • Data saved in: src/main/resources/data/
+  • Use check-system.bat before reporting issues
+
+
+╔════════════════════════════════════════════════════════════════╗
+║  For detailed help, see: README.md or STARTUP-GUIDE.md         ║
+╚════════════════════════════════════════════════════════════════╝

@@ -1,0 +1,75 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/C:/Users/Janith/.m2/wrapper/dists/apache-maven-3.9.12-bin/78a7b4ce/apache-maven-3.9.12/lib/jansi-2.4.2.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< com.fitzone:fitzone-gym >-----------------------
+[INFO] Building FitZone Gym Membership System 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.3:run (default-cli) > test-compile @ fitzone-gym >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ fitzone-gym ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 29 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ fitzone-gym ---
+[INFO] Changes detected - recompiling the module! :input tree
+[INFO] Compiling 35 source files with javac [debug release 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ fitzone-gym ---
+[INFO] skip non existing resourceDirectory e:\Setups\Project 2\Project 2\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ fitzone-gym ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] <<< spring-boot:3.2.3:run (default-cli) < test-compile @ fitzone-gym <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.2.3:run (default-cli) @ fitzone-gym ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.3)
+
+2026-05-06T23:12:47.533+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] com.fitzone.FitZoneApplication           : Starting FitZoneApplication using Java 25.0.2 with PID 25256 (E:\Setups\Project 2\Project 2\target\classes started by Janith in e:\Setups\Project 2\Project 2)
+2026-05-06T23:12:47.535+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] com.fitzone.FitZoneApplication           : No active profile set, falling back to 1 default profile: "default"
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.apache.tomcat.jni.Library in an unnamed module (file:/C:/Users/Janith/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/10.1.19/tomcat-embed-core-10.1.19.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+2026-05-06T23:12:48.405+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-05-06T23:12:48.417+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-06T23:12:48.417+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2026-05-06T23:12:48.469+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-05-06T23:12:48.470+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 891 ms
+2026-05-06T23:12:48.663+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2026-05-06T23:12:48.805+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@61bcbcce, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6af91cc8, org.springframework.security.web.context.SecurityContextHolderFilter@7343922c, org.springframework.security.web.header.HeaderWriterFilter@7cdbaa50, org.springframework.web.filter.CorsFilter@6232ffdb, org.springframework.security.web.authentication.logout.LogoutFilter@e76b097, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@696b4a95, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6f2e1024, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@536d97f8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@330c1f61, org.springframework.security.web.access.ExceptionTranslationFilter@e146f93, org.springframework.security.web.access.intercept.AuthorizationFilter@2f860823]
+2026-05-06T23:12:48.954+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-05-06T23:12:48.962+05:30  INFO 25256 --- [fitness-center-sys-test1] [           main] com.fitzone.FitZoneApplication           : Started FitZoneApplication in 1.735 seconds (process running for 2.012)
+2026-05-06T23:16:09.080+05:30  INFO 25256 --- [fitness-center-sys-test1] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-06T23:16:09.080+05:30  INFO 25256 --- [fitness-center-sys-test1] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-06T23:16:09.081+05:30  INFO 25256 --- [fitness-center-sys-test1] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2026-05-06T23:16:46.616+05:30  WARN 25256 --- [fitness-center-sys-test1] [io-8080-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' is not supported]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  07:12 min
+[INFO] Finished at: 2026-05-06T23:19:56+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.2.3:run (default-cli) on project fitzone-gym: Process terminated with exit code: 1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

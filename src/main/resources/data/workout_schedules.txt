@@ -1,0 +1,2 @@
+scheduleId,memberId,trainerId,dayOfWeek,workoutDetails
+WS001,M001,T001,Monday,Yoga session
