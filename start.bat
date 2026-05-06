@@ -6,13 +6,8 @@ REM ========================================
 REM Auto-detect and set JAVA_HOME
 REM ========================================
 
-if exist "C:\Program Files\Java\jdk-25.0.2" (
-    set "JAVA_HOME=C:\Program Files\Java\jdk-25.0.2"
-    goto JAVA_FOUND
-)
-
-if exist "C:\Program Files\Java\jdk-25" (
-    set "JAVA_HOME=C:\Program Files\Java\jdk-25"
+if exist "C:\Program Files\Java\jdk-17" (
+    set "JAVA_HOME=C:\Program Files\Java\jdk-17"
     goto JAVA_FOUND
 )
 
@@ -21,23 +16,18 @@ if exist "C:\Program Files\Java\jdk-21" (
     goto JAVA_FOUND
 )
 
-if exist "C:\Program Files\Java\jdk-17" (
-    set "JAVA_HOME=C:\Program Files\Java\jdk-17"
-    goto JAVA_FOUND
-)
-
 if exist "C:\Program Files\Java\jdk-11" (
     set "JAVA_HOME=C:\Program Files\Java\jdk-11"
     goto JAVA_FOUND
 )
 
-if exist "C:\Program Files\Eclipse Adoptium\jdk-21" (
-    set "JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21"
+if exist "C:\Program Files\Eclipse Adoptium\jdk-17" (
+    set "JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17"
     goto JAVA_FOUND
 )
 
-if exist "C:\Program Files\Eclipse Adoptium\jdk-17" (
-    set "JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17"
+if exist "C:\Program Files\Eclipse Adoptium\jdk-21" (
+    set "JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21"
     goto JAVA_FOUND
 )
 
@@ -85,12 +75,6 @@ echo Starting application...
 echo Press Ctrl+C to stop
 echo ========================================
 echo.
-
-REM Kill any process already using port 8080
-for /f "tokens=5" %%a in ('netstat -aon ^| find ":8080" ^| find "LISTENING" 2^>nul') do (
-    echo Freeing port 8080 (PID %%a)...
-    taskkill /F /PID %%a >nul 2>&1
-)
 
 REM Run the application
 call mvnw.cmd spring-boot:run

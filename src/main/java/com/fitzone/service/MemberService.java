@@ -19,12 +19,10 @@ public class MemberService {
 
     private final FileMemberRepository memberRepository;
     private final IdGenerator idGenerator;
-    private final MembershipPlanService planService;
 
-    public MemberService(FileMemberRepository memberRepository, IdGenerator idGenerator, MembershipPlanService planService) {
+    public MemberService(FileMemberRepository memberRepository, IdGenerator idGenerator) {
         this.memberRepository = memberRepository;
         this.idGenerator = idGenerator;
-        this.planService = planService;
     }
 
     /**
@@ -40,21 +38,24 @@ public class MemberService {
         String memberId = idGenerator.generateMemberId();
         LocalDate expiryDate = paymentDate.plusMonths(form.getDurationMonths());
 
-        // Find plan to get the fee and correct duration
-        double monthlyFee = 0.0;
-        Optional<MembershipPlan> planOpt = planService.getAllPlans().stream()
-                .filter(p -> p.getPlanName().equalsIgnoreCase(form.getMembershipType()))
-                .findFirst();
-        
-        if (planOpt.isPresent()) {
-            monthlyFee = planOpt.get().getMonthlyFee();
+        // POLYMORPHISM — Create the correct subclass based on membership type
+        Member member;
+        if ("Premium".equalsIgnoreCase(form.getMembershipType())) {
+            member = new PremiumMember(
+                    memberId, form.getFullName(), form.getEmail(), form.getPhone(),
+                    form.getAge(), form.getGender(), form.getDurationMonths(),
+                    paymentDate, expiryDate, form.getNotes() != null ? form.getNotes() : ""
+            );
+        } else {
+            member = new RegularMember(
+                    memberId, form.getFullName(), form.getEmail(), form.getPhone(),
+                    form.getAge(), form.getGender(), form.getDurationMonths(),
+                    paymentDate, expiryDate, form.getNotes() != null ? form.getNotes() : ""
+            );
         }
 
-        Member member = new Member(
-                memberId, form.getFullName(), form.getEmail(), form.getPhone(),
-                form.getAge(), form.getGender(), form.getMembershipType(), form.getDurationMonths(),
-                paymentDate, expiryDate, monthlyFee, form.getNotes() != null ? form.getNotes() : ""
-        );
+        // The monthlyFee is set by the constructor via calculateMonthlyFee()
+        member.setMonthlyFee(member.calculateMonthlyFee());
 
         memberRepository.saveMember(member);
         return member;
@@ -90,30 +91,46 @@ public class MemberService {
         if (existing.isPresent()) {
             Member member = existing.get();
 
-            // Always update basic info
-            member.setFullName(form.getFullName());
-            member.setEmail(form.getEmail());
-            member.setPhone(form.getPhone());
-            member.setAge(form.getAge());
-            member.setGender(form.getGender());
-            member.setMembershipType(form.getMembershipType());
-            member.setDurationMonths(form.getDurationMonths());
-            member.setNotes(form.getNotes() != null ? form.getNotes() : "");
+            // If membership type changed, create a new instance of the correct type
+            boolean typeChanged = !member.getMembershipType().equalsIgnoreCase(form.getMembershipType());
 
-            // Look up plan for fee
-            Optional<MembershipPlan> planOpt = planService.getAllPlans().stream()
-                    .filter(p -> p.getPlanName().equalsIgnoreCase(form.getMembershipType()))
-                    .findFirst();
-            if (planOpt.isPresent()) {
-                member.setMonthlyFee(planOpt.get().getMonthlyFee());
+            if (typeChanged) {
+                Member newMember;
+                if ("Premium".equalsIgnoreCase(form.getMembershipType())) {
+                    newMember = new PremiumMember();
+                } else {
+                    newMember = new RegularMember();
+                }
+                newMember.setMemberId(memberId);
+                newMember.setJoinDate(member.getJoinDate());
+                newMember.setMonthlyFee(newMember.calculateMonthlyFee());
+                newMember.setFullName(form.getFullName());
+                newMember.setEmail(form.getEmail());
+                newMember.setPhone(form.getPhone());
+                newMember.setAge(form.getAge());
+                newMember.setGender(form.getGender());
+                newMember.setMembershipType(form.getMembershipType());
+                newMember.setDurationMonths(form.getDurationMonths());
+                newMember.setNotes(form.getNotes() != null ? form.getNotes() : "");
+                // Recalculate expiry based on join date and new duration
+                if (newMember.getJoinDate() != null) {
+                    newMember.setExpiryDate(newMember.getJoinDate().plusMonths(form.getDurationMonths()));
+                }
+                memberRepository.updateMember(newMember);
+            } else {
+                member.setFullName(form.getFullName());
+                member.setEmail(form.getEmail());
+                member.setPhone(form.getPhone());
+                member.setAge(form.getAge());
+                member.setGender(form.getGender());
+                member.setDurationMonths(form.getDurationMonths());
+                member.setNotes(form.getNotes() != null ? form.getNotes() : "");
+                // Recalculate expiry if duration changed
+                if (member.getJoinDate() != null) {
+                    member.setExpiryDate(member.getJoinDate().plusMonths(form.getDurationMonths()));
+                }
+                memberRepository.updateMember(member);
             }
-
-            // Recalculate expiry if duration or join date is present
-            if (member.getJoinDate() != null) {
-                member.setExpiryDate(member.getJoinDate().plusMonths(form.getDurationMonths()));
-            }
-            
-            memberRepository.updateMember(member);
         }
     }
 
