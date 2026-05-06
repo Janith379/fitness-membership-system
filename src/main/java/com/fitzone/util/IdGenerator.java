@@ -20,6 +20,18 @@ public class IdGenerator {
     @Value("${fitzone.data.payments-file}")
     private String paymentsFilePath;
 
+    @Value("${fitzone.data.trainers-file}")
+    private String trainersFilePath;
+
+    @Value("${fitzone.data.membership-plans-file}")
+    private String plansFilePath;
+
+    @Value("${fitzone.data.workout-schedules-file}")
+    private String workoutSchedulesFilePath;
+
+    @Value("${fitzone.data.diet-plans-file}")
+    private String dietPlansFilePath;
+
     /**
      * Generates the next member ID by reading the members file
      * and finding the highest existing ID number.
@@ -86,5 +98,49 @@ public class IdGenerator {
             System.err.println("Error reading payments file for ID generation: " + e.getMessage());
         }
         return String.format("P%03d", maxNum + 1);
+    }
+
+    public synchronized String generateTrainerId() {
+        return generateGenericId(trainersFilePath, "T");
+    }
+
+    public synchronized String generatePlanId() {
+        return generateGenericId(plansFilePath, "MP");
+    }
+
+    public synchronized String generateWorkoutId() {
+        return generateGenericId(workoutSchedulesFilePath, "WS");
+    }
+
+    public synchronized String generateDietId() {
+        return generateGenericId(dietPlansFilePath, "DP");
+    }
+
+    private synchronized String generateGenericId(String filePath, String prefix) {
+        int maxNum = 0;
+        try {
+            Path path = Paths.get(filePath);
+            if (Files.exists(path)) {
+                List<String> lines = Files.readAllLines(path);
+                for (int i = 1; i < lines.size(); i++) {
+                    String line = lines.get(i).trim();
+                    if (!line.isEmpty()) {
+                        String[] parts = line.split(",", -1);
+                        if (parts.length > 0 && parts[0].startsWith(prefix)) {
+                            try {
+                                int num = Integer.parseInt(parts[0].substring(prefix.length()));
+                                if (num > maxNum) {
+                                    maxNum = num;
+                                }
+                            } catch (NumberFormatException ignored) {
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading file for ID generation: " + e.getMessage());
+        }
+        return String.format("%s%03d", prefix, maxNum + 1);
     }
 }
