@@ -1,1 +1,0 @@
-trainerId,fullName,specialization,phone,email

@@ -1,1 +1,0 @@
-memberId,fullName,email,phone,age,gender,membershipType,durationMonths,joinDate,expiryDate,monthlyFee,notes

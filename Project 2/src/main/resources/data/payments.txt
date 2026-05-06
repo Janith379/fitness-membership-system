@@ -1,1 +1,0 @@
-paymentId,memberId,amount,paymentDate,cardLast4,status
