@@ -1,2 +1,0 @@
-trainerId,fullName,specialization,phone,email
-T001,Test Trainer,Yoga,123456789,test@trainer.com

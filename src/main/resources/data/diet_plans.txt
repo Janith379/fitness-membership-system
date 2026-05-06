@@ -1,2 +1,0 @@
-dietId,memberId,mealType,foodItems,calories
-DP001,M001,Lunch,Chicken Salad,400

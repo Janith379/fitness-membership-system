@@ -1,7 +1,0 @@
-memberId,fullName,email,phone,age,gender,membershipType,durationMonths,joinDate,expiryDate,monthlyFee,notes
-M001,John Silva,john.silva@email.com,0771234567,25,Male,Premium,6,2026-01-15,2026-07-15,7500.00,Interested in personal training
-M002,Sarah Perera,sarah.perera@email.com,0769876543,30,Female,Regular,3,2026-02-01,2026-05-01,5000.00,Morning sessions preferred
-M003,Kasun Fernando,kasun.fernando@email.com,0712345678,22,Male,Regular,12,2026-03-10,2027-03-10,5000.00,Student member
-M004,John Doe,john@example.com,0771234567,30,Male,Regular,1,2026-03-28,2026-04-28,5000.00,
-M005,Charuka Janith,janith@gmail.com,0765556666,20,Male,Regular,6,2026-04-25,2026-10-25,5000.00,Diabetes patient
-M006,John Test,john@test.com,1234567890,30,Male,Regular,1,2026-04-25,2026-05-25,5000.00,
