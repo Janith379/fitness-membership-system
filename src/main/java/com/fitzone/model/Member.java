@@ -10,7 +10,7 @@ import java.time.LocalDate;
  *   by RegularMember and PremiumMember to return different fee amounts.
  * OOP CONCEPT — INHERITANCE: RegularMember and PremiumMember extend this class.
  */
-public abstract class Member {
+public class Member {
 
     // --- Private fields (ENCAPSULATION) ---
     private String memberId;
@@ -25,12 +25,13 @@ public abstract class Member {
     private LocalDate expiryDate;
     private double monthlyFee;
     private String notes;
+    private String password;
 
     // --- Constructors ---
-    protected Member() {
+    public Member() {
     }
 
-    protected Member(String memberId, String fullName, String email, String phone,
+    public Member(String memberId, String fullName, String email, String phone,
                      int age, String gender, String membershipType, int durationMonths,
                      LocalDate joinDate, LocalDate expiryDate, double monthlyFee, String notes) {
         this.memberId = memberId;
@@ -51,13 +52,22 @@ public abstract class Member {
      * POLYMORPHISM — Abstract method overridden by subclasses to compute
      * the monthly membership fee based on membership type.
      */
-    public abstract double calculateMonthlyFee();
+    public double calculateMonthlyFee() {
+        return this.monthlyFee;
+    }
 
     /**
      * Calculates the total payment amount = monthlyFee * durationMonths.
      */
     public double calculateTotalAmount() {
-        return calculateMonthlyFee() * durationMonths;
+        double total = calculateMonthlyFee() * durationMonths;
+        double discount = 0.0;
+        if (durationMonths >= 6) {
+            discount = 0.15;
+        } else if (durationMonths >= 3) {
+            discount = 0.10;
+        }
+        return total * (1 - discount);
     }
 
     // --- Getters and Setters (ENCAPSULATION) ---
@@ -158,6 +168,14 @@ public abstract class Member {
         this.notes = notes;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     /**
      * Converts this member to a CSV line for file storage.
      */
@@ -174,7 +192,8 @@ public abstract class Member {
                 joinDate != null ? joinDate.toString() : "",
                 expiryDate != null ? expiryDate.toString() : "",
                 String.format("%.2f", monthlyFee),
-                safe(notes)
+                safe(notes),
+                safe(password)
         );
     }
 
