@@ -1,20 +1,811 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-
-    <title>Fitness Center</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitZone Gym | Build Your Strength</title>
+    <!-- CSS Dependencies -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link th:href="@{/css/premium.css}" rel="stylesheet">
 </head>
+<body>
 
-<body class="container">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNav">
+    <!-- Animated navbar elements -->
+    <canvas id="navParticleCanvas"></canvas>
+    <div class="nav-scan-line"></div>
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand" th:href="@{/}">
+            FIT<span>ZONE</span> GYM<svg class="nav-brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29l-1.43-1.43z"/></svg>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#membership">Membership</a></li>
+                <li class="nav-item"><a class="nav-link" href="#trainers">Trainers</a></li>
+                <li class="nav-item"><a class="nav-link" href="#workouts">Workouts</a></li>
+                <li class="nav-item"><a class="nav-link" href="#diet">Diet Plans</a></li>
 
-<h1 class="mt-4">Fitness Center Membership System</h1>
 
-<a href="/register" class="btn btn-primary">Register Member</a>
+                <!-- Auth Buttons -->
+                <li class="nav-item ms-lg-3" sec:authorize="isAnonymous()">
+                    <a th:href="@{/members/register}" class="nav-link btn-auth">Register</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAnonymous()">
+                    <a th:href="@{/login}" class="nav-link btn-auth login">Login</a>
+                </li>
 
-<a href="/members" class="btn btn-success">View Members</a>
+                <!-- Authenticated Links -->
+                <li class="nav-item ms-lg-3" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link btn-auth" th:href="@{/members/list}">Admin</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('MEMBER')">
+                    <a class="nav-link btn-auth" th:href="@{/dashboard}">Profile</a>
+                </li>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" class="ms-2">
+                        <button type="submit" class="nav-link border-0 bg-transparent text-danger">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
+<!-- Hero Section -->
+<header id="home" class="hero">
+    <div class="container-fluid px-md-5 mx-0 hero-content" data-aos="fade-right">
+        <div class="red-line"></div>
+        <h1>BUILD YOUR<br><span>STRENGTH</span><br>BUILD YOUR<br><span>LIFE</span></h1>
+        <p class="mb-5 text-gray fs-5" style="max-width: 500px;">Join FitZone Gym and start your journey to a stronger, healthier you.</p>
+        <div sec:authorize="isAnonymous()">
+            <a th:href="@{/members/register}" class="btn-main">Join Now <i class="bi bi-arrow-right ms-2"></i></a>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" th:href="@{/members/list}" class="btn-profile">Admin Panel <i class="bi bi-speedometer2 ms-2"></i></a>
+            <a th:if="${#authorization.expression('hasRole(''ROLE_MEMBER'')')}" th:href="@{/dashboard}" class="btn-profile">View Profile <i class="bi bi-person-circle ms-2"></i></a>
+        </div>
+    </div>
+</header>
+
+<!-- Counter Section -->
+<section class="counter-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="counter-card">
+                    <div class="counter-number" data-target="2500">2500+</div>
+                    <div class="counter-label">Members</div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="counter-card">
+                    <div class="counter-number" data-target="50">50+</div>
+                    <div class="counter-label">Expert Trainers</div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="counter-card">
+                    <div class="counter-number" data-target="100">100+</div>
+                    <div class="counter-label">Equipments</div>
+                </div>
+            </div>
+            <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="counter-card">
+                    <div class="counter-number" data-target="5">5</div>
+                    <div class="counter-label">Branches</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6" data-aos="fade-right">
+                <img th:src="@{/images/about_gym.png}" class="img-fluid glass-card p-2" alt="About FitZone">
+            </div>
+            <div class="col-md-6 ps-md-5" data-aos="fade-left">
+                <div class="section-title">
+                    <div class="red-line"></div>
+                    <p class="text-primary fw-bold text-uppercase mb-2">About Us</p>
+                    <h2>WE HELP YOU BECOME <span>THE BEST VERSION OF YOU</span></h2>
+                </div>
+                <p class="text-gray mb-4">FitZone Gym is more than just a gym. We provide world-class equipment, expert guidance, customized workout plans and nutrition advice to help you achieve your fitness goals.</p>
+                <a href="#workouts" class="btn-main btn-no-ripple py-2 px-4 fs-6">Learn More</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Membership Plans (Dynamic from Admin) -->
+<section id="membership" class="bg-dark">
+    <div class="container">
+        <div class="section-title text-center mx-auto" data-aos="fade-up">
+            <h2>MEMBERSHIP <span>PLANS</span></h2>
+            <p class="mx-auto">Choose the perfect plan for your fitness journey.</p>
+        </div>
+        <div class="row g-4">
+            <!-- Dynamic plans from admin -->
+            <div class="col-md-4" th:each="plan, iterStat : ${plans}"
+                 data-aos="fade-up" th:attr="data-aos-delay=${(iterStat.index + 1) * 100}"
+                 th:classappend="${iterStat.index >= 3} ? 'd-none hidden-plan' : ''">
+                <div class="glass-card price-card" th:classappend="${iterStat.index == 0} ? ' featured' : ''">
+                    <div class="badge bg-danger mb-3 rounded-0 px-3" th:if="${iterStat.index == 0}">MOST POPULAR</div>
+                    <h3 class="bold-text" th:text="${plan.planName}">Plan Name</h3>
+                    <div class="price-tag">LKR <span th:text="${#numbers.formatDecimal(plan.monthlyFee, 1, 'COMMA', 0, 'POINT')}">0</span><span>/month</span></div>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-clock me-2 text-primary"></i><span th:text="'Duration: ' + ${plan.durationMonths} + ' month(s)'">Duration</span></li>
+                        <li><i class="bi bi-people me-2 text-primary"></i><span th:text="'Target: ' + ${plan.targetGender}">Target</span></li>
+                        <li th:if="${plan.description != null and !plan.description.isEmpty()}"
+                            th:each="feature : ${plan.description.split(';')}">
+                            <i class="bi bi-check-circle me-2 text-primary"></i><span th:text="${feature.trim()}">Feature</span>
+                        </li>
+                    </ul>
+                    <a th:href="@{/members/register(plan=${plan.planName})}"
+                       th:class="${iterStat.index == 0} ? 'btn btn-danger w-100 py-3 rounded-0 fw-bold' : 'btn btn-outline-light w-100 py-3 rounded-0 fw-bold'">CHOOSE PLAN</a>
+                </div>
+            </div>
+
+            <!-- Fallback when no plans exist -->
+            <div class="col-12 text-center" th:if="${#lists.isEmpty(plans)}">
+                <div class="glass-card p-5">
+                    <i class="bi bi-clipboard-data text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3 fw-bold">No Membership Plans Available Yet</h4>
+                    <p class="text-gray">Our membership plans are being updated. Please check back soon!</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5" th:if="${#lists.size(plans) > 3}">
+            <button id="viewMorePlansBtn" class="btn btn-outline-danger rounded-0 px-5 py-3 fw-bold">VIEW ALL PLANS</button>
+        </div>
+    </div>
+</section>
+
+<!-- Trainers Section (Dynamic from Admin) -->
+<section id="trainers">
+    <div class="container">
+        <div class="section-title text-center mx-auto" data-aos="fade-up">
+            <h2>OUR EXPERT <span>TRAINERS</span></h2>
+            <p class="mx-auto">Learn from the best. Train with the best.</p>
+        </div>
+        <div class="row g-4">
+            <!-- Dynamic trainers from admin -->
+            <div class="col-md-4" th:each="trainer, iterStat : ${trainers}"
+                 data-aos="fade-up" th:attr="data-aos-delay=${(iterStat.index + 1) * 100}"
+                 th:classappend="${iterStat.index >= 3} ? 'd-none hidden-trainer' : ''">
+                <div class="trainer-card p-0">
+                    <div class="trainer-img-container">
+                        <img th:src="@{${trainer.displayImageUrl}}" class="card-img-top trainer-img" th:alt="${trainer.fullName}">
+                    </div>
+                    <div class="trainer-info">
+                        <h4 th:text="${trainer.fullName}">Trainer Name</h4>
+                        <p class="text-gray mb-1" th:text="${trainer.specialization}">Specialization</p>
+                        <p class="small text-primary mb-1"><i class="bi bi-telephone me-2"></i><span th:text="${trainer.phone}">Phone</span></p>
+                        <p class="small text-gray"><i class="bi bi-envelope me-2"></i><span th:text="${trainer.email}">Email</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fallback when no trainers exist -->
+            <div class="col-12 text-center" th:if="${#lists.isEmpty(trainers)}">
+                <div class="glass-card p-5">
+                    <i class="bi bi-person-badge text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3 fw-bold">No Trainers Available Yet</h4>
+                    <p class="text-gray">Our expert trainers are being updated. Please check back soon!</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5" th:if="${#lists.size(trainers) > 3}">
+            <button id="viewMoreTrainersBtn" class="btn btn-outline-danger rounded-0 px-5 py-3 fw-bold">VIEW ALL TRAINERS</button>
+        </div>
+    </div>
+</section>
+
+<!-- Workouts Section -->
+<section id="workouts" class="bg-dark">
+    <div class="container">
+        <div class="section-title text-center mx-auto" data-aos="fade-up">
+            <h2>OUR WORKOUT <span>PROGRAMS</span></h2>
+            <p class="mx-auto">Find the perfect workout for your goals.</p>
+        </div>
+        <div class="row g-4">
+            <!-- Dynamic workout programs from admin -->
+            <div class="col-md-4" th:each="workout, iterStat : ${workouts}"
+                 data-aos="zoom-in" th:attr="data-aos-delay=${(iterStat.index + 1) * 100}"
+                 th:classappend="${iterStat.index >= 3} ? 'd-none hidden-workout' : ''">
+                <div class="program-card" th:style="|background-image: url('@{${workout.displayImageUrl}}')|">
+                    <div class="program-overlay">
+                        <h4 class="fw-bold mb-1" th:text="${workout.workoutName}">Program Name</h4>
+                        <p class="text-primary text-uppercase small fw-bold mb-3" th:text="${workout.dayOfWeek}">Monday</p>
+                        <p class="small text-gray mb-3" th:text="${workout.shortDetails}">Build muscle and strength</p>
+                        <a th:href="@{/members/register}" class="text-primary text-decoration-none fw-bold small">JOIN NOW <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fallback when no workouts exist -->
+            <div class="col-12 text-center" th:if="${#lists.isEmpty(workouts)}">
+                <div class="glass-card p-5">
+                    <i class="bi bi-fire text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3 fw-bold">No Workout Programs Available Yet</h4>
+                    <p class="text-gray">Our fitness programs are being updated. Please check back soon!</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-5" th:if="${#lists.size(workouts) > 3}">
+            <button id="viewMoreWorkoutsBtn" class="btn btn-outline-danger rounded-0 px-5 py-3 fw-bold">VIEW ALL PROGRAMS</button>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- Diet Plan Section -->
+<section id="diet">
+    <div class="container">
+        <div class="section-title text-center mx-auto" data-aos="fade-up">
+            <h2>DIET <span>PLANS</span></h2>
+            <p class="mx-auto">Eat right, live healthy.</p>
+        </div>
+        <div class="row g-4">
+            <!-- Dynamic diet plans from admin -->
+            <div class="col-md-4" th:each="diet, iterStat : ${diets}"
+                 data-aos="fade-up" th:attr="data-aos-delay=${(iterStat.index + 1) * 100}"
+                 th:classappend="${iterStat.index >= 3} ? 'd-none hidden-diet' : ''">
+                <div class="glass-card text-center">
+                    <img th:src="@{${diet.displayImageUrl}}" class="img-fluid rounded-circle mb-4" style="width: 150px; height: 150px; object-fit: cover;" th:alt="${diet.mealType}">
+                    <h4 class="fw-bold" th:text="${diet.mealType}">Weight Loss Diet</h4>
+                    <p class="small text-gray" th:text="${diet.foodItems}">Low calorie, high nutrient meals for weight loss.</p>
+                    <p class="text-primary fw-bold" th:text="${diet.calories} + ' kcal'">300 kcal</p>
+                    <a th:href="@{/members/register}" class="text-primary text-decoration-none fw-bold small">JOIN NOW</a>
+                </div>
+            </div>
+
+            <!-- Fallback when no diets exist -->
+            <div class="col-12 text-center" th:if="${#lists.isEmpty(diets)}">
+                <div class="glass-card p-5">
+                    <i class="bi bi-apple text-primary" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3 fw-bold">No Diet Plans Available Yet</h4>
+                    <p class="text-gray">Our nutrition plans are being updated. Please check back soon!</p>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4" th:if="${#lists.size(diets) > 3}">
+            <button id="viewMoreDietsBtn" class="btn btn-outline-danger rounded-0 px-5 py-3 fw-bold">VIEW ALL DIET PLANS</button>
+        </div>
+    </div>
+
+    <div class="mt-5 p-5 glass-card d-flex align-items-center justify-content-between flex-wrap gap-4" data-aos="zoom-in">
+        <div>
+            <h3 class="bold-text mb-2">Need a custom diet plan?</h3>
+            <p class="text-gray mb-0">Get a personalized diet plan from our nutrition experts.</p>
+        </div>
+        <a href="#" class="btn-main">GET STARTED</a>
+    </div>
+    </div>
+</section>
+
+<!-- Smart BMI Calculator Section -->
+<section id="bmi-calculator" class="bg-dark">
+    <div class="container">
+        <div class="section-title text-center mx-auto" data-aos="fade-up">
+            <div class="red-line mx-auto"></div>
+            <p class="text-primary fw-bold text-uppercase mb-2 mx-auto">Smart Analysis</p>
+            <h2>BMI <span>CALCULATOR</span></h2>
+            <p class="mx-auto">Find out your body mass index and get personalized fitness recommendations to start your journey.</p>
+        </div>
+
+        <div class="row g-5 align-items-center mt-2">
+            <!-- Calculator Form -->
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="glass-card p-5 bmi-form-card">
+                    <div class="d-flex align-items-center mb-4">
+                        <i class="bi bi-person-bounding-box text-primary fs-3 me-3"></i>
+                        <h4 class="bold-text mb-0 text-white text-uppercase" style="letter-spacing: 1px;">Body Metrics</h4>
+                    </div>
+                    <form id="bmiForm">
+                        <div class="row g-4">
+                            <div class="col-md-6 form-group">
+                                <label class="small text-gray text-uppercase fw-bold mb-2">Height (cm)</label>
+                                <input type="number" id="bmiHeight" class="form-control bg-dark text-white border-0 py-3" placeholder="e.g. 175" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="small text-gray text-uppercase fw-bold mb-2">Weight (kg)</label>
+                                <input type="number" id="bmiWeight" class="form-control bg-dark text-white border-0 py-3" placeholder="e.g. 70" required>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <label class="small text-gray text-uppercase fw-bold mb-2">Age</label>
+                                <input type="number" id="bmiAge" class="form-control bg-dark text-white border-0 py-3" placeholder="e.g. 25" required>
+                            </div>
+                        </div>
+                        <button type="button" id="calculateBmiBtn" class="btn-main btn-no-ripple btn-hover-red w-100 justify-content-center py-3 mt-4">
+                            CALCULATE BMI <i class="bi bi-calculator ms-2"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Result Card -->
+            <div class="col-lg-6" data-aos="fade-left">
+                <!-- Initial State -->
+                <div id="bmiInitialCard" class="glass-card p-5 text-center d-flex flex-column justify-content-center align-items-center h-100" style="min-height: 420px;">
+                    <i class="bi bi-heart-pulse text-primary mb-3" style="font-size: 3.5rem; opacity: 0.8;"></i>
+                    <h5 class="text-white bold-text mb-3">Your Results Will Appear Here</h5>
+                    <p class="text-gray" style="max-width: 300px;">Enter your height, weight and age to get a personalized fitness plan tailored just for you.</p>
+                </div>
+
+                <!-- Result State -->
+                <div id="bmiResultCard" class="glass-card p-5 d-none h-100" style="transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
+                    <div class="text-center mb-4">
+                        <h5 class="text-gray mb-2">Your BMI Is</h5>
+                        <div id="bmiValueDisplay" class="display-3 fw-bold mb-1" style="transition: color 0.4s ease;">--</div>
+                        <div id="bmiStatusDisplay" class="badge fs-6 rounded-0 px-4 py-2 mt-2" style="transition: background-color 0.4s ease;">Status</div>
+                    </div>
+
+                    <!-- Dynamic BMI Meter Bar -->
+                    <div class="bmi-meter-container mb-4 px-2">
+                        <div class="d-flex justify-content-between text-gray fw-bold" style="font-size: 0.65rem; margin-bottom: 4px;">
+                            <span>15</span>
+                            <span style="margin-left: 5%;">18.5</span>
+                            <span style="margin-left: 5%;">25</span>
+                            <span style="margin-left: 5%;">30</span>
+                            <span>40+</span>
+                        </div>
+                        <div class="progress rounded-pill overflow-hidden" style="height: 12px; background-color: #222; border: 1px solid rgba(255,255,255,0.1);">
+                            <!-- Using standard hex colors for the scale segments -->
+                            <div class="progress-bar" style="width: 20%; background-color: #f39c12;" title="Underweight"></div>
+                            <div class="progress-bar" style="width: 30%; background-color: #2ecc71;" title="Healthy"></div>
+                            <div class="progress-bar" style="width: 25%; background-color: #e74c3c;" title="Overweight"></div>
+                            <div class="progress-bar" style="width: 25%; background-color: #8b0000;" title="Obese"></div>
+                        </div>
+                        <div class="position-relative" style="height: 24px;">
+                            <i id="bmiIndicator" class="bi bi-caret-up-fill position-absolute fs-4" style="top: -12px; left: 0%; transform: translateX(-50%); transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1); text-shadow: 0 2px 5px rgba(0,0,0,0.5);"></i>
+                        </div>
+                    </div>
+
+                    <hr class="opacity-10 my-3">
+
+                    <div class="text-start mb-4">
+                        <h6 class="text-white fw-bold mb-3"><i class="bi bi-stars text-primary me-2"></i>Smart Recommendations:</h6>
+                        <ul class="list-unstyled text-gray">
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-bullseye text-primary mt-1 me-3"></i>
+                                <div>
+                                    <span class="small text-uppercase fw-bold d-block mb-1" style="color: #888;">Fitness Goal</span>
+                                    <span id="recGoal" class="text-white fw-bold">--</span>
+                                </div>
+                            </li>
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-card-checklist text-primary mt-1 me-3"></i>
+                                <div>
+                                    <span class="small text-uppercase fw-bold d-block mb-1" style="color: #888;">Membership Plan</span>
+                                    <span id="recPlan" class="text-white fw-bold">--</span>
+                                </div>
+                            </li>
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-fire text-primary mt-1 me-3"></i>
+                                <div>
+                                    <span class="small text-uppercase fw-bold d-block mb-1" style="color: #888;">Workout Plan</span>
+                                    <span id="recWorkout" class="text-white fw-bold">--</span>
+                                </div>
+                            </li>
+                            <li class="d-flex align-items-start">
+                                <i class="bi bi-apple text-primary mt-1 me-3"></i>
+                                <div>
+                                    <span class="small text-uppercase fw-bold d-block mb-1" style="color: #888;">Diet Plan</span>
+                                    <span id="recDiet" class="text-white fw-bold">--</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a href="#" id="registerWithPlanBtn" class="btn btn-outline-danger w-100 py-3 fw-bold rounded-0">
+                        REGISTER WITH THIS PLAN
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-md-4">
+                <div class="footer-logo bold-text">FIT<span>ZONE</span> GYM</div>
+                <p class="text-gray">Your ultimate fitness destination. Build strength, build confidence, build you.</p>
+                <div class="d-flex gap-3 fs-4 mt-4">
+                    <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="col-md-2 footer-links">
+                <h5>QUICK LINKS</h5>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#membership">Membership</a></li>
+                    <li><a href="#trainers">Trainers</a></li>
+                    <li><a href="#workouts">Workouts</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 footer-links">
+                <h5>OTHER LINKS</h5>
+                <ul>
+                    <li><a href="#diet">Diet Plans</a></li>
+                    <li><a href="#">Payment</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Login</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>CONTACT US</h5>
+                <ul class="list-unstyled text-gray">
+                    <li class="mb-3 d-flex gap-3">
+                        <i class="bi bi-geo-alt text-primary"></i>
+                        <span>8 Dambulla Rd,<br>Kurunegala, Sri Lanka</span>
+                    </li>
+                    <li class="mb-3 d-flex gap-3">
+                        <i class="bi bi-telephone text-primary"></i>
+                        <span>077 543 7598</span>
+                    </li>
+                    <li class="mb-3 d-flex gap-3">
+                        <i class="bi bi-envelope text-primary"></i>
+                        <span>it12group5@fitzonegym.lk</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-5 opacity-10">
+        <p class="text-center text-gray small mb-0">&copy; 2025-2026 IT 1.2 Group_5 FitZone Gym. ALL RIGHTS RESERVED.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+
+    // Navbar Scroll Effect
+    window.addEventListener('scroll', function() {
+        const nav = document.getElementById('mainNav');
+        const sections = document.querySelectorAll('section, header');
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+        // Background scroll effect
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+
+        // Scrollspy: Highlight active link based on scroll position
+        let current = "";
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - 150) {
+                current = section.getAttribute("id");
+            }
+        });
+
+        navLinks.forEach((link) => {
+            link.classList.remove("active");
+            if (link.getAttribute("href") === "#" + current) {
+                link.classList.add("active");
+            }
+        });
+    });
+
+    // Counters
+    const counters = document.querySelectorAll('.counter-number');
+    const speed = 200;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                const counter = entry.target;
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText.replace('+', '');
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc) + (target > 10 ? '+' : '');
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target + (target > 10 ? '+' : '');
+                    }
+                };
+                updateCount();
+                observer.unobserve(counter);
+            }
+        });
+    });
+
+    counters.forEach(counter => observer.observe(counter));
+
+    // View More Plans Toggle
+    const viewMorePlansBtn = document.getElementById('viewMorePlansBtn');
+    if (viewMorePlansBtn) {
+        viewMorePlansBtn.addEventListener('click', function() {
+            const hiddenPlans = document.querySelectorAll('.hidden-plan');
+            hiddenPlans.forEach(plan => {
+                plan.classList.toggle('d-none');
+            });
+            this.innerText = this.innerText === 'VIEW ALL PLANS' ? 'SHOW LESS' : 'VIEW ALL PLANS';
+        });
+    }
+
+    // View More Trainers Toggle
+    const viewMoreTrainersBtn = document.getElementById('viewMoreTrainersBtn');
+    if (viewMoreTrainersBtn) {
+        viewMoreTrainersBtn.addEventListener('click', function() {
+            const hiddenTrainers = document.querySelectorAll('.hidden-trainer');
+            hiddenTrainers.forEach(trainer => {
+                trainer.classList.toggle('d-none');
+            });
+            this.innerText = this.innerText === 'VIEW ALL TRAINERS' ? 'SHOW LESS' : 'VIEW ALL TRAINERS';
+        });
+    }
+
+    // View More Workouts Toggle
+    const viewMoreWorkoutsBtn = document.getElementById('viewMoreWorkoutsBtn');
+    if (viewMoreWorkoutsBtn) {
+        viewMoreWorkoutsBtn.addEventListener('click', function() {
+            const hiddenWorkouts = document.querySelectorAll('.hidden-workout');
+            hiddenWorkouts.forEach(workout => {
+                workout.classList.toggle('d-none');
+            });
+            this.innerText = this.innerText === 'VIEW ALL PROGRAMS' ? 'SHOW LESS' : 'VIEW ALL PROGRAMS';
+        });
+    }
+
+    // View More Diets Toggle
+    const viewMoreDietsBtn = document.getElementById('viewMoreDietsBtn');
+    if (viewMoreDietsBtn) {
+        viewMoreDietsBtn.addEventListener('click', function() {
+            const hiddenDiets = document.querySelectorAll('.hidden-diet');
+            hiddenDiets.forEach(diet => {
+                diet.classList.toggle('d-none');
+            });
+            this.innerText = this.innerText === 'VIEW ALL DIET PLANS' ? 'SHOW LESS' : 'VIEW ALL DIET PLANS';
+        });
+    }
+
+    // =============================================
+    //  SMART BMI CALCULATOR
+    // =============================================
+    const calculateBmiBtn = document.getElementById('calculateBmiBtn');
+    if (calculateBmiBtn) {
+        calculateBmiBtn.addEventListener('click', function() {
+            const height = parseFloat(document.getElementById('bmiHeight').value);
+            const weight = parseFloat(document.getElementById('bmiWeight').value);
+            const age = document.getElementById('bmiAge').value;
+
+            if (!height || !weight || !age || height <= 0 || weight <= 0) {
+                alert("Please enter valid height, weight and age.");
+                return;
+            }
+
+            // Calculate BMI
+            const heightInMeters = height / 100;
+            const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+
+            let status = "";
+            let goal = "";
+            let plan = "";
+            let workout = "";
+            let diet = "";
+            let statusColor = "";
+            let hexShadowColor = ""; // For box-shadow opacity
+
+            // Calculate indicator position for the meter (0% to 100%)
+            let pos = 0;
+            const bmiValue = parseFloat(bmi);
+            if (bmiValue < 18.5) {
+                // Map 15-18.5 to 0-20%
+                let ratio = Math.max(0, (bmiValue - 15) / (18.5 - 15));
+                pos = ratio * 20;
+            } else if (bmiValue <= 25) {
+                // Map 18.5-25 to 20-50%
+                let ratio = (bmiValue - 18.5) / (25 - 18.5);
+                pos = 20 + (ratio * 30);
+            } else if (bmiValue <= 30) {
+                // Map 25-30 to 50-75%
+                let ratio = (bmiValue - 25) / (30 - 25);
+                pos = 50 + (ratio * 25);
+            } else {
+                // Map 30-40+ to 75-100%
+                let ratio = Math.min(1, (bmiValue - 30) / (40 - 30));
+                pos = 75 + (ratio * 25);
+            }
+            pos = Math.max(0, Math.min(100, pos)); // Clamp between 0-100
+
+            if (bmi < 18.5) {
+                status = "Underweight";
+                goal = "Muscle Gain";
+                plan = "Gold Plan"; // Assuming Gold Plan exists, or fallback
+                workout = "Muscle Gain Program";
+                diet = "High Protein Surplus Diet";
+                statusColor = "#f39c12"; // Orange
+                hexShadowColor = "rgba(243, 156, 18, ";
+            } else if (bmi >= 18.5 && bmi <= 24.9) {
+                status = "Healthy";
+                goal = "General Fitness / Strength";
+                plan = "Basic Plan"; // Assuming Basic Plan exists
+                workout = "General Fitness";
+                diet = "Balanced Nutrition Diet";
+                statusColor = "#2ecc71"; // Green
+                hexShadowColor = "rgba(46, 204, 113, ";
+            } else if (bmi >= 25 && bmi <= 29.9) {
+                status = "Overweight";
+                goal = "Weight Loss";
+                plan = "Premium Plan";
+                workout = "Weight Loss Program";
+                diet = "Caloric Deficit Diet";
+                statusColor = "#e74c3c"; // Red
+                hexShadowColor = "rgba(231, 76, 60, ";
+            } else {
+                status = "Obese";
+                goal = "Fat Loss";
+                plan = "Premium Plan";
+                workout = "Beginner Fat Loss Program";
+                diet = "Structured Weight Loss Diet";
+                statusColor = "#c0392b"; // Dark Red
+                hexShadowColor = "rgba(192, 57, 43, ";
+            }
+
+            // Update UI
+            const valueDisplay = document.getElementById('bmiValueDisplay');
+            valueDisplay.innerText = bmi;
+            valueDisplay.style.color = statusColor;
+
+            const statusDisplay = document.getElementById('bmiStatusDisplay');
+            statusDisplay.innerText = status;
+            statusDisplay.style.backgroundColor = statusColor;
+
+            // Update Meter Indicator
+            const indicator = document.getElementById('bmiIndicator');
+            indicator.style.left = pos + '%';
+            indicator.style.color = statusColor;
+
+            document.getElementById('recGoal').innerText = goal;
+            document.getElementById('recPlan').innerText = plan;
+            document.getElementById('recWorkout').innerText = workout;
+            document.getElementById('recDiet').innerText = diet;
+
+            // Setup Register Button URL to auto-fill
+            const registerBtn = document.getElementById('registerWithPlanBtn');
+            registerBtn.href = `/members/register?plan=${encodeURIComponent(plan)}&goal=${encodeURIComponent(goal)}&bmi=${encodeURIComponent(bmi)}&age=${encodeURIComponent(age)}`;
+
+            // Toggle visibility
+            document.getElementById('bmiInitialCard').classList.add('d-none');
+            const resultCard = document.getElementById('bmiResultCard');
+            resultCard.classList.remove('d-none');
+
+            // Dynamic Matching Color Border and Neon Glow Animation
+            resultCard.style.border = `2px solid ${hexShadowColor} 0.6)`;
+            resultCard.style.boxShadow = `0 0 50px ${hexShadowColor} 0.4)`;
+            setTimeout(() => {
+                resultCard.style.boxShadow = `0 0 20px ${hexShadowColor} 0.15)`;
+            }, 800);
+        });
+    }
+    // =============================================
+    //  NAVBAR PARTICLE ANIMATION
+    // =============================================
+    (function() {
+        const nav = document.getElementById('mainNav');
+        const canvas = document.getElementById('navParticleCanvas');
+        if (!canvas || !nav) return;
+
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animFrameId;
+
+        function resizeCanvas() {
+            canvas.width  = nav.offsetWidth;
+            canvas.height = nav.offsetHeight;
+        }
+
+        function randomBetween(a, b) {
+            return a + Math.random() * (b - a);
+        }
+
+        function createParticle() {
+            const isRed = Math.random() > 0.35;
+            return {
+                x:      randomBetween(0, canvas.width),
+                y:      canvas.height + 4,
+                vx:     randomBetween(-0.3, 0.3),
+                vy:     randomBetween(-0.5, -1.4),
+                radius: randomBetween(0.8, 2.2),
+                alpha:  0,
+                maxAlpha: randomBetween(0.35, 0.85),
+                fadeIn: true,
+                color:  isRed
+                    ? `rgba(255,45,45,1)`
+                    : `rgba(255,255,255,1)`,
+                life:   0,
+                maxLife: randomBetween(80, 200)
+            };
+        }
+
+        function spawnParticles() {
+            const count = Math.floor(canvas.width / 40);
+            for (let i = 0; i < count; i++) {
+                const p = createParticle();
+                p.y = randomBetween(0, canvas.height);
+                p.life = randomBetween(0, p.maxLife);
+                p.alpha = randomBetween(0, p.maxAlpha);
+                particles.push(p);
+            }
+        }
+
+        function tick() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Spawn new particles occasionally
+            if (Math.random() < 0.25) {
+                particles.push(createParticle());
+            }
+
+            particles = particles.filter(p => p.life < p.maxLife);
+
+            particles.forEach(p => {
+                p.x    += p.vx;
+                p.y    += p.vy;
+                p.life += 1;
+
+                // Fade in / fade out
+                const halfLife = p.maxLife / 2;
+                if (p.life < halfLife) {
+                    p.alpha = (p.life / halfLife) * p.maxAlpha;
+                } else {
+                    p.alpha = ((p.maxLife - p.life) / halfLife) * p.maxAlpha;
+                }
+
+                const colorBase = p.color.replace('1)', `${p.alpha})`);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = colorBase;
+
+                // Subtle glow
+                ctx.shadowBlur  = p.radius * 4;
+                ctx.shadowColor = p.color.replace('1)', '0.6)');
+                ctx.fill();
+                ctx.shadowBlur  = 0;
+            });
+
+            animFrameId = requestAnimationFrame(tick);
+        }
+
+        resizeCanvas();
+        spawnParticles();
+        tick();
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+    })();
+</script>
 </body>
 </html>
