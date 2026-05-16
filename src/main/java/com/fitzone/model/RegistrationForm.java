@@ -38,6 +38,13 @@ public class RegistrationForm {
 
     private String notes;
 
+    @NotBlank(message = "Password is required")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$", message = "Password must contain at least one capital letter, one simple letter, and one number")
+    private String password;
+
+    @NotBlank(message = "Confirm password is required")
+    private String confirmPassword;
+
     // --- Getters and Setters ---
 
     public String getFullName() {
@@ -102,5 +109,21 @@ public class RegistrationForm {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }
