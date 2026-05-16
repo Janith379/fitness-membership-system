@@ -86,7 +86,7 @@ public class FileMemberRepository {
         CsvUtil.rewriteFile(membersFilePath, CsvUtil.MEMBERS_HEADER, updatedLines);
     }
 
-//Deletes a member by their ID. Rewrites the file without the deleted member.
+//Deletes a member by their ID. Rewrites the file without the deleted member..
 
     public void deleteMember(String memberId) {
         List<Member> allMembers = getAllMembers();
