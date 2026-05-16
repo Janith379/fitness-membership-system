@@ -23,7 +23,7 @@ public class FileMemberRepository {
 
     @PostConstruct
     public void init() {
-        CsvUtil.ensureFileExists(membersFilePath, CsvUtil.MEMBERS_HEADER);
+        CsvUtil.ensureFileExists(membersFilePath,CsvUtil.MEMBERS_HEADER);
     }
 
 //Saves a new member by appending to the CSV file.
@@ -36,7 +36,7 @@ public class FileMemberRepository {
 
     public List<Member> getAllMembers() {
         List<String> lines = CsvUtil.readDataLines(membersFilePath);
-        List<Member> members = new ArrayList<>();
+        List<Member> members =new ArrayList<>();
         for (String line : lines) {
             Member m = CsvUtil.parseMemberLine(line);
             if (m != null) {
@@ -48,7 +48,7 @@ public class FileMemberRepository {
 
 //Finds a member by their ID (e.g. M001).
 
-    public Optional<Member> findById(String memberId) {
+    public Optional<Member>findById(String memberId) {
         return getAllMembers().stream()
                 .filter(m -> m.getMemberId().equalsIgnoreCase(memberId))
                 .findFirst();
@@ -60,7 +60,7 @@ public class FileMemberRepository {
         if (query == null || query.trim().isEmpty()) {
             return getAllMembers();
         }
-        String lowerQuery = query.trim().toLowerCase();
+        String lowerQuery =query.trim().toLowerCase();
         return getAllMembers().stream()
                 .filter(m ->
                         m.getMemberId().toLowerCase().contains(lowerQuery) ||
@@ -76,7 +76,7 @@ public class FileMemberRepository {
     public void updateMember(Member updatedMember) {
         List<Member> allMembers = getAllMembers();
         List<String> updatedLines = new ArrayList<>();
-        for (Member m : allMembers) {
+        for (Member m :allMembers) {
             if (m.getMemberId().equalsIgnoreCase(updatedMember.getMemberId())) {
                 updatedLines.add(updatedMember.toCsvLine());
             } else {
@@ -86,11 +86,11 @@ public class FileMemberRepository {
         CsvUtil.rewriteFile(membersFilePath, CsvUtil.MEMBERS_HEADER, updatedLines);
     }
 
-//Deletes a member by their ID. Rewrites the file without the deleted member..
+//Deletes a member by their ID. Rewrites the file without the deleted member.
 
     public void deleteMember(String memberId) {
-        List<Member> allMembers = getAllMembers();
-        List<String> remainingLines = allMembers.stream()
+        List<Member> allMembers =getAllMembers();
+        List<String> remainingLines =allMembers.stream()
                 .filter(m -> !m.getMemberId().equalsIgnoreCase(memberId))
                 .map(Member::toCsvLine)
                 .collect(Collectors.toList());
