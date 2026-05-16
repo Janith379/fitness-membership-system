@@ -2,7 +2,10 @@ package com.fitzone.controller;
 
 import com.fitzone.model.*;
 import com.fitzone.service.MemberService;
+import com.fitzone.service.MembershipPlanService;
 import com.fitzone.service.PaymentService;
+import com.fitzone.service.WorkoutScheduleService;
+import com.fitzone.service.DietPlanService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -24,18 +27,33 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PaymentService paymentService;
+    private final MembershipPlanService planService;
+    private final WorkoutScheduleService workoutScheduleService;
+    private final DietPlanService dietPlanService;
 
-    public MemberController(MemberService memberService, PaymentService paymentService) {
+    public MemberController(MemberService memberService, PaymentService paymentService,
+                            MembershipPlanService planService, WorkoutScheduleService workoutScheduleService,
+                            DietPlanService dietPlanService) {
         this.memberService = memberService;
         this.paymentService = paymentService;
+        this.planService = planService;
+        this.workoutScheduleService = workoutScheduleService;
+        this.dietPlanService = dietPlanService;
     }
 
     /**
      * Displays the registration form.
+     * If the user is returning from the payment page, pre-fill with session data.
      */
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("registrationForm", new RegistrationForm());
+    public String showRegistrationForm(Model model, HttpSession session) {
+        RegistrationForm existingForm = (RegistrationForm) session.getAttribute("registrationForm");
+        if (existingForm != null) {
+            model.addAttribute("registrationForm", existingForm);
+        } else {
+            model.addAttribute("registrationForm", new RegistrationForm());
+        }
+        model.addAttribute("plans", planService.getAllPlans());
         return "register";
     }
 
@@ -49,24 +67,37 @@ public class MemberController {
                                       Model model,
                                       HttpSession session) {
         if (result.hasErrors()) {
+            model.addAttribute("plans", planService.getAllPlans());
             return "register";
         }
 
         // Store registration data in session for the payment step
         session.setAttribute("registrationForm", form);
 
-        // Calculate preview amounts using polymorphism
-        double monthlyFee;
-        if ("Premium".equalsIgnoreCase(form.getMembershipType())) {
-            PremiumMember temp = new PremiumMember();
-            monthlyFee = temp.calculateMonthlyFee();
-        } else {
-            RegularMember temp = new RegularMember();
-            monthlyFee = temp.calculateMonthlyFee();
+        // Calculate preview amounts using selected plan and duration-based discounts
+        double monthlyFee = 0.0;
+        Optional<MembershipPlan> selectedPlan = planService.getAllPlans().stream()
+                .filter(p -> p.getPlanName().equalsIgnoreCase(form.getMembershipType()))
+                .findFirst();
+        if (selectedPlan.isPresent()) {
+            monthlyFee = selectedPlan.get().getMonthlyFee();
         }
-        double totalAmount = monthlyFee * form.getDurationMonths();
+
+        double originalAmount = monthlyFee * form.getDurationMonths();
+        double discountPercentage = 0.0;
+        if (form.getDurationMonths() >= 6) {
+            discountPercentage = 0.15;
+        } else if (form.getDurationMonths() >= 3) {
+            discountPercentage = 0.10;
+        }
+
+        double discountAmount = originalAmount * discountPercentage;
+        double totalAmount = originalAmount - discountAmount;
 
         session.setAttribute("monthlyFee", monthlyFee);
+        session.setAttribute("originalAmount", originalAmount);
+        session.setAttribute("discountPercentage", (int)(discountPercentage * 100));
+        session.setAttribute("discountAmount", discountAmount);
         session.setAttribute("totalAmount", totalAmount);
 
         return "redirect:/payment";
@@ -104,6 +135,11 @@ public class MemberController {
         // Fetch payments for this member
         List<Payment> payments = paymentService.getPaymentsByMemberId(id);
         model.addAttribute("payments", payments);
+
+        // Fetch workouts and diets for this member
+        model.addAttribute("workouts", workoutScheduleService.findByMemberId(id));
+        model.addAttribute("diets", dietPlanService.findByMemberId(id));
+
         return "member-detail";
     }
 
@@ -130,9 +166,12 @@ public class MemberController {
         form.setMembershipType(member.getMembershipType());
         form.setDurationMonths(member.getDurationMonths());
         form.setNotes(member.getNotes());
+        form.setPassword(member.getPassword());
+        form.setConfirmPassword(member.getPassword());
 
         model.addAttribute("registrationForm", form);
         model.addAttribute("memberId", id);
+        model.addAttribute("plans", planService.getAllPlans());
         return "member-update";
     }
 
@@ -145,8 +184,25 @@ public class MemberController {
                                 BindingResult result,
                                 Model model,
                                 RedirectAttributes redirectAttributes) {
+        // Special handling for updates: ignore password validation errors.
+        // Old members might have simple passwords (like phone numbers) that don't match the new regex.
+        // Since the admin is not changing the password here, we shouldn't block the update.
+        if (result.hasFieldErrors("password") || result.hasFieldErrors("confirmPassword")) {
+            // Check if these are the ONLY errors or if there are other validation issues
+            boolean otherErrors = result.getFieldErrors().stream()
+                    .anyMatch(e -> !e.getField().toLowerCase().contains("password"));
+
+            if (!otherErrors) {
+                // If only password errors exist, we proceed with the update
+                memberService.updateMember(id, form);
+                redirectAttributes.addFlashAttribute("successMessage", "Member " + id + " updated successfully!");
+                return "redirect:/members/list";
+            }
+        }
+
         if (result.hasErrors()) {
             model.addAttribute("memberId", id);
+            model.addAttribute("plans", planService.getAllPlans());
             return "member-update";
         }
 
