@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Payment failed - FitZone Gym">
+    <title>Payment Failed - FitZone Gym</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link th:href="@{/css/styles.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">
+            <span class="brand-fit">Fit</span><span class="brand-zone">Zone</span>
+            <small class="text-muted ms-2" style="font-size: 0.7rem; font-weight: 400;">GYM</small>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}"><i class="bi bi-house-door me-1"></i>Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/members/register}"><i class="bi bi-person-plus me-1"></i>Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/members/list}"><i class="bi bi-grid-3x3-gap me-1"></i>Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Failure Content -->
+<section class="result-page" style="padding-top: 80px;">
+    <div class="container">
+        <div class="result-card card-custom mx-auto fade-in-up">
+            <div class="result-icon failure">
+                <i class="bi bi-x-circle-fill"></i>
+            </div>
+            <h2 class="mb-2" style="font-family: 'Outfit', sans-serif; font-weight: 800;">Payment Failed</h2>
+            <p class="text-muted mb-3">Unfortunately, your payment could not be processed.</p>
+
+            <!-- Failure Reason -->
+            <div class="alert-custom alert-danger-custom mb-4">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span th:text="${failureReason}">Payment was declined.</span>
+            </div>
+
+            <!-- Helpful Info -->
+            <div class="payment-summary text-start mb-4" style="max-width: 100%;">
+                <h6 class="mb-3" style="font-family: 'Outfit', sans-serif; font-weight: 700;">
+                    <i class="bi bi-lightbulb me-2" style="color: var(--warning);"></i>Tips for Successful Payment
+                </h6>
+                <ul class="list-unstyled" style="color: var(--text-secondary);">
+                    <li class="mb-2"><i class="bi bi-check2 text-success me-2"></i>Use a card number starting with <strong>4</strong> (Visa)</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-success me-2"></i>Use a card number starting with <strong>5</strong> (MasterCard)</li>
+                    <li class="mb-2"><i class="bi bi-check2 text-success me-2"></i>Example: <code style="color: var(--primary);">4111111111111111</code></li>
+                    <li class="mb-2"><i class="bi bi-x text-danger me-2"></i>Cards starting with other digits will be declined</li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a th:href="@{/members/register}" class="btn-primary-custom">
+                    <i class="bi bi-arrow-repeat me-2"></i>Try Again
+                </a>
+                <a th:href="@{/members/list}" class="btn-outline-custom">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>Go to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p class="mb-0">
+            <span class="brand-fit" style="font-family: 'Outfit', sans-serif; font-weight: 700;">Fit</span><span style="font-family: 'Outfit', sans-serif; font-weight: 700;">Zone</span>
+            Gym &copy; 2026 — Membership Management System
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/scripts.js}"></script>
+</body>
+</html>
