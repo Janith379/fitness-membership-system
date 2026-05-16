@@ -1,43 +1,363 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-
-    <title>Register Member</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitZone | Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link th:href="@{/css/premium.css}" rel="stylesheet">
 </head>
+<body class="auth-page">
 
-<body class="container">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top scrolled" id="mainNav">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand" th:href="@{/}">
+            FIT<span>ZONE</span> GYM
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/#about}">About</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/#membership}">Membership</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/#trainers}">Trainers</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/#workouts}">Workouts</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/#diet}">Diet Plans</a></li>
 
-<h2 class="mt-4">Register New Member</h2>
+                <li class="nav-item ms-lg-3">
+                    <a th:href="@{/members/register}" class="nav-link btn-auth active">Register</a>
+                </li>
+                <li class="nav-item ms-lg-3">
+                    <a th:href="@{/login}" class="nav-link btn-auth login">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<form action="/register" method="post">
-
-    <div class="mb-3">
-        <label>ID</label>
-        <input type="number" name="id" class="form-control">
+<div class="auth-card register-card" style="margin-top: 120px; margin-bottom: 50px;" data-aos="zoom-in">
+    <div class="text-center mb-5">
+        <a th:href="@{/}" class="text-decoration-none">
+            <h2 class="bold-text text-white mb-0">FIT<span class="text-primary">ZONE</span></h2>
+        </a>
+        <div class="red-line mt-3" style="width: 40px; height: 3px;"></div>
+        <p class="text-gray mt-4">CREATE YOUR ACCOUNT</p>
     </div>
 
-    <div class="mb-3">
-        <label>Name</label>
-        <input type="text" name="name" class="form-control">
-    </div>
+    <form id="registrationForm" th:action="@{/members/register}" th:object="${registrationForm}" method="post" novalidate>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Full Name</label>
+                <input type="text" class="form-control" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'is-invalid' : ''" placeholder="Enter your full name" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+            </div>
 
-    <div class="mb-3">
-        <label>Plan</label>
-        <input type="text" name="plan" class="form-control">
-    </div>
+            <div class="col-md-12 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Email Address</label>
+                <input type="email" class="form-control" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" placeholder="your@email.com" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
 
-    <div class="mb-3">
-        <label>Duration</label>
-        <input type="text" name="duration" class="form-control">
-    </div>
+            <div class="col-md-6 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Password</label>
+                <div class="password-wrapper">
+                    <input type="password" class="form-control" id="password" name="password" th:value="*{password}" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" placeholder="Create a password" required>
+                    <i class="bi bi-eye toggle-password" id="togglePassword"></i>
+                </div>
+                <div class="password-error" id="passwordError" style="display:none; color: #ff4d4d; font-size: 0.8rem; margin-top: 6px;"></div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="display:block;"></div>
+            </div>
 
-    <button class="btn btn-primary">Register</button>
+            <div class="col-md-6 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Confirm Password</label>
+                <div class="password-wrapper">
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" th:value="*{confirmPassword}" th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''" placeholder="Confirm your password" required>
+                    <i class="bi bi-eye toggle-password" id="toggleConfirmPassword"></i>
+                </div>
+                <div class="password-error" id="confirmError" style="display:none; color: #ff4d4d; font-size: 0.8rem; margin-top: 6px;"></div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" style="display:block;"></div>
+            </div>
 
-</form>
+            <div class="col-md-6 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Phone Number</label>
+                <input type="text" class="form-control" th:field="*{phone}" th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid' : ''" placeholder="0771234567" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+            </div>
 
+            <div class="col-md-6 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Age</label>
+                <input type="number" class="form-control" id="ageField" th:field="*{age}" th:classappend="${#fields.hasErrors('age')} ? 'is-invalid' : ''" placeholder="25" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+            </div>
+
+            <!-- Smart BMI Auto-fill Fields -->
+            <div class="col-md-4 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2 text-primary">BMI Result</label>
+                <input type="text" class="form-control bg-dark text-white border-danger" id="bmiField" name="bmi" placeholder="Not calculated" readonly style="box-shadow: 0 0 5px rgba(255,45,45,0.2);">
+            </div>
+
+            <div class="col-md-4 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2 text-primary">Fitness Goal</label>
+                <input type="text" class="form-control bg-dark text-white border-danger" id="goalField" name="fitnessGoal" placeholder="Not specified" readonly style="box-shadow: 0 0 5px rgba(255,45,45,0.2);">
+            </div>
+
+            <div class="col-md-4 form-group d-flex align-items-end">
+                <a th:href="@{/#bmi-calculator}" class="btn btn-outline-danger w-100 fw-bold" style="padding: 10px 0; font-size: 0.85rem;">
+                    <i class="bi bi-calculator me-1"></i> CALC BMI
+                </a>
+            </div>
+
+
+            <div class="col-md-12 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-3 d-block">Gender</label>
+                <div class="radio-group">
+                    <input class="form-check-input" type="radio" th:field="*{gender}" value="Male" id="genderMale">
+                    <label for="genderMale"><span>Male</span></label>
+
+                    <input class="form-check-input" type="radio" th:field="*{gender}" value="Female" id="genderFemale">
+                    <label for="genderFemale"><span>Female</span></label>
+
+                    <input class="form-check-input" type="radio" th:field="*{gender}" value="Other" id="genderOther">
+                    <label for="genderOther"><span>Other</span></label>
+                </div>
+                <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></div>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Membership Type</label>
+                <div class="select-wrapper">
+                    <select class="form-select form-control" id="membershipType" th:field="*{membershipType}" th:classappend="${#fields.hasErrors('membershipType')} ? 'is-invalid' : ''">
+                        <option value="">Select type...</option>
+                        <option th:each="plan : ${plans}"
+                                th:value="${plan.planName}"
+                                th:data-gender="${plan.targetGender}"
+                                th:text="${plan.planName + ' — LKR ' + plan.monthlyFee}"></option>
+                    </select>
+                </div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('membershipType')}" th:errors="*{membershipType}"></div>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <label class="small text-gray text-uppercase fw-bold mb-2">Duration</label>
+                <div class="select-wrapper">
+                    <select class="form-select form-control" th:field="*{durationMonths}" th:classappend="${#fields.hasErrors('durationMonths')} ? 'is-invalid' : ''">
+                        <option value="">Select duration...</option>
+                        <option value="1">1 Month</option>
+                        <option value="3">3 Months (10% Off)</option>
+                        <option value="6">6 Months (15% Off)</option>
+                        <option value="12">12 Months (15% Off)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-main btn-no-ripple btn-hover-red w-100 justify-content-center py-3 mt-4">PROCEED TO PAYMENT</button>
+
+        <div class="text-center mt-4">
+            <p class="text-gray small">Already have an account? <a th:href="@{/login}" class="text-primary text-decoration-none fw-bold">LOGIN</a></p>
+        </div>
+    </form>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const genderRadios = document.querySelectorAll('input[name="gender"]');
+        const planSelect = document.getElementById('membershipType');
+
+        if (!planSelect) return;
+
+        const allOptions = Array.from(planSelect.options);
+
+        function filterPlans(preSelectedPlan = null) {
+            const selectedGender = document.querySelector('input[name="gender"]:checked')?.value;
+            const currentVal = preSelectedPlan || planSelect.value;
+
+            planSelect.innerHTML = '';
+
+            allOptions.forEach(opt => {
+                const targetGender = opt.getAttribute('data-gender');
+                // If we have a pre-selected plan, we might need to ignore gender filter for a moment to find its target gender
+                if (!selectedGender || !targetGender || targetGender === 'Any' || targetGender === selectedGender || selectedGender === 'Other') {
+                    planSelect.appendChild(opt);
+                }
+            });
+
+            if (preSelectedPlan) {
+                planSelect.value = preSelectedPlan;
+            } else {
+                const valueStillExists = Array.from(planSelect.options).some(opt => opt.value === currentVal);
+                planSelect.value = valueStillExists ? currentVal : '';
+            }
+        }
+
+        // Handle URL parameters for pre-selected plan, BMI, and Goal
+        const urlParams = new URLSearchParams(window.location.search);
+        const planParam = urlParams.get('plan');
+        const bmiParam = urlParams.get('bmi');
+        const goalParam = urlParams.get('goal');
+        const ageParam = urlParams.get('age');
+
+        // Auto-fill BMI data if present
+        if (bmiParam) {
+            const bmiField = document.getElementById('bmiField');
+            if (bmiField) bmiField.value = bmiParam;
+        }
+        if (goalParam) {
+            const goalField = document.getElementById('goalField');
+            if (goalField) goalField.value = goalParam;
+        }
+        if (ageParam) {
+            const ageField = document.getElementById('ageField');
+            if (ageField && !ageField.value) ageField.value = ageParam;
+        }
+
+        if (planParam) {
+            // Find the target gender for this plan to pre-set the gender radio
+            const prePlanOption = allOptions.find(opt => opt.value === planParam);
+            if (prePlanOption) {
+                const targetGender = prePlanOption.getAttribute('data-gender');
+                if (targetGender && targetGender !== 'Any') {
+                    const genderRadio = document.querySelector(`input[name="gender"][value="${targetGender}"]`);
+                    if (genderRadio) {
+                        genderRadio.checked = true;
+                    }
+                }
+                filterPlans(planParam);
+            } else {
+                filterPlans(planParam); // Try to set it even if option not found yet
+            }
+        } else {
+            filterPlans();
+        }
+
+        genderRadios.forEach(radio => radio.addEventListener('change', () => filterPlans()));
+
+        // --- Password Eye Icon Toggle ---
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordField = document.getElementById('password');
+        if (togglePassword && passwordField) {
+            togglePassword.addEventListener('click', function() {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                this.classList.toggle('bi-eye');
+                this.classList.toggle('bi-eye-slash');
+            });
+        }
+
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        if (toggleConfirmPassword && confirmPasswordField) {
+            toggleConfirmPassword.addEventListener('click', function() {
+                const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordField.setAttribute('type', type);
+                this.classList.toggle('bi-eye');
+                this.classList.toggle('bi-eye-slash');
+            });
+        }
+
+        // --- Real-time Password Validation ---
+        const passwordError = document.getElementById('passwordError');
+        const confirmError = document.getElementById('confirmError');
+
+        if (passwordField && passwordError) {
+            passwordField.addEventListener('input', function() {
+                const val = passwordField.value;
+                let errors = [];
+
+                if (val.length > 0 && val.length < 8) errors.push('At least 8 characters');
+                if (val.length > 0 && !/[A-Z]/.test(val)) errors.push('At least one capital letter');
+                if (val.length > 0 && !/[a-z]/.test(val)) errors.push('At least one simple letter');
+                if (val.length > 0 && !/[0-9]/.test(val)) errors.push('At least one number');
+
+                if (errors.length > 0) {
+                    passwordError.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>' + errors.join(' • ');
+                    passwordError.style.display = 'block';
+                    passwordField.style.borderColor = '#ff4d4d';
+                } else if (val.length > 0) {
+                    passwordError.innerHTML = '<i class="bi bi-check-circle me-1" style="color:#2ecc71"></i><span style="color:#2ecc71">Password is strong</span>';
+                    passwordError.style.display = 'block';
+                    passwordField.style.borderColor = '#2ecc71';
+                } else {
+                    passwordError.style.display = 'none';
+                    passwordField.style.borderColor = '';
+                }
+
+                // Also recheck confirm field
+                if (confirmPasswordField && confirmPasswordField.value.length > 0) {
+                    checkConfirmMatch();
+                }
+            });
+        }
+
+        function checkConfirmMatch() {
+            if (!confirmPasswordField || !confirmError) return;
+            const val = confirmPasswordField.value;
+            if (val.length === 0) {
+                confirmError.style.display = 'none';
+                confirmPasswordField.style.borderColor = '';
+                return;
+            }
+            if (val !== passwordField.value) {
+                confirmError.innerHTML = '<i class="bi bi-x-circle me-1"></i>Passwords do not match';
+                confirmError.style.display = 'block';
+                confirmPasswordField.style.borderColor = '#ff4d4d';
+            } else {
+                confirmError.innerHTML = '<i class="bi bi-check-circle me-1" style="color:#2ecc71"></i><span style="color:#2ecc71">Passwords match</span>';
+                confirmError.style.display = 'block';
+                confirmPasswordField.style.borderColor = '#2ecc71';
+            }
+        }
+
+        if (confirmPasswordField) {
+            confirmPasswordField.addEventListener('input', checkConfirmMatch);
+        }
+
+        // --- Block form submission if password is invalid ---
+        const regForm = document.getElementById('registrationForm');
+        if (regForm) {
+            regForm.addEventListener('submit', function(e) {
+                const pass = passwordField ? passwordField.value : '';
+                const confirm = confirmPasswordField ? confirmPasswordField.value : '';
+                const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+                let valid = true;
+
+                if (!passPattern.test(pass)) {
+                    if (passwordError) {
+                        let errors = [];
+                        if (pass.length < 8) errors.push('At least 8 characters');
+                        if (!/[A-Z]/.test(pass)) errors.push('At least one capital letter');
+                        if (!/[a-z]/.test(pass)) errors.push('At least one simple letter');
+                        if (!/[0-9]/.test(pass)) errors.push('At least one number');
+                        passwordError.innerHTML = '<i class="bi bi-exclamation-circle me-1"></i>' + errors.join(' • ');
+                        passwordError.style.display = 'block';
+                        passwordField.style.borderColor = '#ff4d4d';
+                    }
+                    valid = false;
+                }
+
+                if (pass !== confirm) {
+                    if (confirmError) {
+                        confirmError.innerHTML = '<i class="bi bi-x-circle me-1"></i>Passwords do not match';
+                        confirmError.style.display = 'block';
+                        confirmPasswordField.style.borderColor = '#ff4d4d';
+                    }
+                    valid = false;
+                }
+
+                if (!valid) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>
