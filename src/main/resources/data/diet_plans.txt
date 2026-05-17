@@ -1,0 +1,6 @@
+dietId,memberId,mealType,foodItems,calories,imageUrl
+DP001,M009,Lunch,Chicken Salad,400,https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000
+DP003,M001,Breakfast,Oats,300,https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000
+DP006,M012,Lunch,white rice 100g with chicken 200g,400,https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000
+DP007,M011,Breakfast,oats 100g with strawberry,250,https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1000
+DP008,M013,Breakfast,basmathi rice 100g,boiled chicken200g,450,
