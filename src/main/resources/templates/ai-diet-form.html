@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitZone | AI Diet Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link th:href="@{/css/premium.css}" rel="stylesheet">
+    <style>
+        .dashboard-bg {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('/images/my_dashboard.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body class="bg-dark dashboard-bg">
+
+<nav class="navbar scrolled fixed-top">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand" th:href="@{/}">FIT<span>ZONE</span> GYM</a>
+        <div class="d-flex align-items-center">
+            <span class="text-white me-3 d-none d-md-inline" th:text="${member.fullName}">Member</span>
+            <a th:href="@{/dashboard}" class="nav-link me-3 fw-bold">DASHBOARD</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="margin-top: 120px; margin-bottom: 80px;">
+    <div class="row justify-content-center" data-aos="fade-up">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="text-white bold-text m-0">AI <span>DIET GENERATOR</span></h2>
+                    <p class="text-primary m-0"><i class="bi bi-robot"></i> Powered by Smart Nutrition AI</p>
+                </div>
+                <a th:href="@{/member/bmr}" class="btn btn-outline-light rounded-0">BACK TO BMR</a>
+            </div>
+
+            <div class="glass-card">
+                <form th:action="@{/ai-diet/generate}" th:object="${request}" method="post">
+                    
+                    <h4 class="text-white bold-text mb-4">YOUR PREFERENCES</h4>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label text-gray small fw-bold">DIET TYPE</label>
+                            <select class="form-select bg-dark text-white border-secondary" th:field="*{dietType}" required>
+                                <option value="Standard">Standard</option>
+                                <option value="Vegetarian">Vegetarian</option>
+                                <option value="Vegan">Vegan</option>
+                                <option value="Keto">Keto</option>
+                                <option value="High Protein">High Protein</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="form-label text-gray small fw-bold">MEALS PER DAY</label>
+                            <select class="form-select bg-dark text-white border-secondary" th:field="*{mealsPerDay}" required>
+                                <option value="3">3 Meals (Breakfast, Lunch, Dinner)</option>
+                                <option value="4">4 Meals (Includes 1 Snack)</option>
+                                <option value="5" selected>5 Meals (Includes 2 Snacks)</option>
+                                <option value="6">6 Meals (Bodybuilder split)</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-gray small fw-bold">ALLERGIES</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" th:field="*{allergies}" placeholder="e.g. Peanut allergy, Lactose intolerant">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-gray small fw-bold">MEDICAL RESTRICTIONS</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" th:field="*{medicalConditions}" placeholder="e.g. Diabetes, Hypertension">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-gray small fw-bold">BUDGET PREFERENCE</label>
+                            <select class="form-select bg-dark text-white border-secondary" th:field="*{budgetPreference}">
+                                <option value="Moderate">Moderate / Average</option>
+                                <option value="Budget-Friendly">Budget-Friendly (Cheaper ingredients)</option>
+                                <option value="Premium">Premium (Organic, high-end cuts)</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-gray small fw-bold">LOCAL FOOD PREFERENCE</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" th:field="*{localFoodPreference}" placeholder="e.g. Sri Lankan, Mediterranean">
+                        </div>
+                    </div>
+
+                    <div class="mt-5 text-center">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-0 px-5 fw-bold w-100" id="generateBtn">
+                            <i class="bi bi-magic me-2"></i> GENERATE MY AI DIET PLAN
+                        </button>
+                        <p class="text-gray small mt-2">This uses your latest BMR targets to create a customized meal plan.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init();
+    document.getElementById('generateBtn').addEventListener('click', function() {
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
+    });
+</script>
+</body>
+</html>
