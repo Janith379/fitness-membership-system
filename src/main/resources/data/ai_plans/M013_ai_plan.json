@@ -1,0 +1,88 @@
+{
+  "macros" : {
+    "protein_g" : 176,
+    "carbs_g" : 220,
+    "fat_g" : 65
+  },
+  "recommendations" : [ "Increase water intake to 3.0L daily.", "Add more vegetables for micronutrients.", "Consider batch-cooking to make adherence easier." ],
+  "member_id" : "M013",
+  "target_calories" : 1539,
+  "total_calories" : 1539,
+  "water_intake_liters" : 3.0,
+  "meal_plan" : [ {
+    "meal" : "Breakfast",
+    "items" : [ {
+      "food" : "Oats (Dry)",
+      "quantity" : "60g",
+      "calories" : 228
+    }, {
+      "food" : "Whole Milk",
+      "quantity" : "200ml",
+      "calories" : 122
+    }, {
+      "food" : "Whey Protein",
+      "quantity" : "30g",
+      "calories" : 120
+    }, {
+      "food" : "Almonds",
+      "quantity" : "13g",
+      "calories" : 75
+    } ],
+    "subtotal_calories" : 545,
+    "protein_g" : 41,
+    "carbs_g" : 54,
+    "fat_g" : 18
+  }, {
+    "meal" : "Lunch",
+    "items" : [ {
+      "food" : "Grilled Chicken Breast",
+      "quantity" : "200g",
+      "calories" : 330
+    }, {
+      "food" : "White Rice (Cooked)",
+      "quantity" : "200g",
+      "calories" : 260
+    }, {
+      "food" : "Olive Oil",
+      "quantity" : "15ml",
+      "calories" : 135
+    }, {
+      "food" : "Broccoli",
+      "quantity" : "130g",
+      "calories" : 45
+    } ],
+    "subtotal_calories" : 770,
+    "protein_g" : 70,
+    "carbs_g" : 66,
+    "fat_g" : 23
+  }, {
+    "meal" : "Dinner",
+    "items" : [ {
+      "food" : "Salmon (Raw Weight)",
+      "quantity" : "180g",
+      "calories" : 375
+    }, {
+      "food" : "Sweet Potato",
+      "quantity" : "200g",
+      "calories" : 172
+    }, {
+      "food" : "Asparagus",
+      "quantity" : "150g",
+      "calories" : 30
+    }, {
+      "food" : "Butter",
+      "quantity" : "11g",
+      "calories" : -353
+    } ],
+    "subtotal_calories" : 224,
+    "protein_g" : 42,
+    "carbs_g" : 46,
+    "fat_g" : 32
+  } ],
+  "meal_substitutions" : [ {
+    "replace" : "White rice",
+    "with" : "Brown rice"
+  } ],
+  "trainer_alerts" : [ "Member's previous calorie adherence was low; recommend a follow-up.", "Monitor weight weekly to ensure 1539 kcal supports the goal.", "Protein intake below recommended target for muscle retention." ],
+  "admin_alerts" : [ "Member attendance decreasing." ]
+}

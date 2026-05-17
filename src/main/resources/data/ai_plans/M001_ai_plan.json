@@ -1,0 +1,110 @@
+{
+  "macros" : {
+    "protein_g" : 176,
+    "carbs_g" : 137,
+    "fat_g" : 46
+  },
+  "recommendations" : [ "Increase water intake to 3.0L daily.", "Prioritize consistency over meal timings.", "Consider batch meal prep for compliance." ],
+  "member_id" : "M001",
+  "target_calories" : 1666,
+  "total_calories" : 1666,
+  "water_intake_liters" : 3.0,
+  "meal_plan" : [ {
+    "meal" : "Breakfast",
+    "items" : [ {
+      "food" : "Oats (Dry)",
+      "quantity" : "44g",
+      "calories" : 167
+    }, {
+      "food" : "Whole Milk",
+      "quantity" : "173ml",
+      "calories" : 104
+    }, {
+      "food" : "Whey Protein",
+      "quantity" : "21g",
+      "calories" : 83
+    }, {
+      "food" : "Almonds",
+      "quantity" : "11g",
+      "calories" : 63
+    } ],
+    "subtotal_calories" : 417,
+    "protein_g" : 44,
+    "carbs_g" : 34,
+    "fat_g" : 12
+  }, {
+    "meal" : "Lunch",
+    "items" : [ {
+      "food" : "Grilled Chicken Breast",
+      "quantity" : "159g",
+      "calories" : 262
+    }, {
+      "food" : "White Rice (Cooked)",
+      "quantity" : "157g",
+      "calories" : 204
+    }, {
+      "food" : "Olive Oil",
+      "quantity" : "10ml",
+      "calories" : 87
+    }, {
+      "food" : "Broccoli",
+      "quantity" : "86g",
+      "calories" : 30
+    } ],
+    "subtotal_calories" : 583,
+    "protein_g" : 62,
+    "carbs_g" : 48,
+    "fat_g" : 16
+  }, {
+    "meal" : "Dinner",
+    "items" : [ {
+      "food" : "Salmon (Raw Weight)",
+      "quantity" : "132g",
+      "calories" : 275
+    }, {
+      "food" : "Sweet Potato",
+      "quantity" : "145g",
+      "calories" : 125
+    }, {
+      "food" : "Asparagus",
+      "quantity" : "125g",
+      "calories" : 25
+    }, {
+      "food" : "Butter",
+      "quantity" : "10g",
+      "calories" : 75
+    } ],
+    "subtotal_calories" : 500,
+    "protein_g" : 53,
+    "carbs_g" : 41,
+    "fat_g" : 14
+  }, {
+    "meal" : "Snacks",
+    "items" : [ {
+      "food" : "Greek Yogurt (Non-fat)",
+      "quantity" : "169g",
+      "calories" : 100
+    }, {
+      "food" : "Mixed Berries",
+      "quantity" : "66g",
+      "calories" : 33
+    }, {
+      "food" : "Honey",
+      "quantity" : "11g",
+      "calories" : 33
+    } ],
+    "subtotal_calories" : 166,
+    "protein_g" : 17,
+    "carbs_g" : 14,
+    "fat_g" : 4
+  } ],
+  "meal_substitutions" : [ {
+    "replace" : "White rice",
+    "with" : "Brown rice"
+  }, {
+    "replace" : "Whole Milk",
+    "with" : "Almond Milk / Oat Milk"
+  } ],
+  "trainer_alerts" : [ "Adherence monitoring recommended.", "Monitor weight weekly to ensure 1666 kcal aligns with the Weight Loss goal." ],
+  "admin_alerts" : [ "Member profile active and healthy." ]
+}
