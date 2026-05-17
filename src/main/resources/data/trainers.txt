@@ -1,0 +1,7 @@
+trainerId,fullName,specialization,phone,email,imageUrl,status
+T001,Buddhi Jayasundara,Yoga,0789653321,buddibro@gmail.com,/images/trainer_1.png,Busy
+T002,Natasha Fernando,Yoga,07132354465,sanduni1234@gmail.com,/images/trainer_2.png,Available
+T003,Lushan Pushparaja,Fitness Trainer,0789658421,lushan3435@gmail.com,/images/trainer_3.jpg,On Leave
+T004,Hasini Edirisinghe,personal trainer,0781346422,hasiii3435@gmail.com,/images/trainer_4.jpg,Available
+T005,Abhishek Nipun,Senior Fitness Trainer,0771905016,nipunabhishek08@gmail.com,/images/trainers/1778947912686_T005.png,Available
+T006,Kasthuri,Strength Training,0721245755,kasthuri200@gmail.com,/images/trainers/1778952388589_trainer_6.png,Available
