@@ -205,4 +205,10 @@ public class Member {
     public String toString() {
         return membershipType + " Member [" + memberId + "] " + fullName;
     }
+
+    public void setHeightCm(double heightCm) {
+    }
+
+    public void setWeightKg(double weightKg) {
+    }
 }
